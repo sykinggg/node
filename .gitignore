@@ -1,0 +1,11 @@
+node_modules
+package-lock.json
+dist
+*.log
+publish/*.tar
+publish/*.tar.gz
+publish/*.zip
+publish/*.7z
+publish/html
+.vscode/**
+

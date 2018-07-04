@@ -10,8 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.6.1",
     "cheerio": "^1.0.0-rc.2",
     "mongodb": "^2.2.33",
+    "phantom": "^6.0.3",
+    "phantomjs": "^2.1.7",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   }
