@@ -1,0 +1,28 @@
+{
+  "name": "study",
+  "version": "0.0.1",
+  "description": "study-node",
+  "main": "6666",
+  "scripts": {
+    "test": "npm test",
+    "dev": "supervisor -w build ./build/server.js",
+    "build": "tsc"
+  },
+  "author": "sy",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^10.5.2"
+  },
+  "dependencies": {
+    "async": "^2.6.1",
+    "cheerio": "^1.0.0-rc.2",
+    "fs": "0.0.1-security",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^5.0.0-alpha.3",
+    "http": "0.0.0",
+    "path": "^0.12.7",
+    "phantom": "^6.0.3",
+    "request": "^2.87.0",
+    "typescript": "^2.9.2"
+  }
+}
