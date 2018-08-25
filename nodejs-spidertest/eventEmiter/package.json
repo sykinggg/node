@@ -11,11 +11,13 @@
   "author": "sy",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^10.5.2"
+    "@types/node": "^10.5.2",
+    "phantomjs-polyfills": "^1.0.1"
   },
   "dependencies": {
     "async": "^2.6.1",
     "cheerio": "^1.0.0-rc.2",
+    "classlist.js": "^1.1.20150312",
     "fs": "0.0.1-security",
     "gulp": "^3.9.1",
     "gulp-typescript": "^5.0.0-alpha.3",
@@ -23,6 +25,7 @@
     "path": "^0.12.7",
     "phantom": "^6.0.3",
     "request": "^2.87.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "web-animations-js": "file:node_modules/web-animations-js"
   }
 }
