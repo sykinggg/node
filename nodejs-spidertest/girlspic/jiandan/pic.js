@@ -28,6 +28,16 @@ function downloadImg(url, filename, callback) {
     }).pipe(stream).on('close', callback);
 }
 
+function mkdir(dirpath) {
+    fs.exists(dirpath, (exists) => {
+        if(!exists) {
+            fs.mkdir(dirpath);
+        }
+    })
+}
+
+mkdir('jiandan/images');
+
 async function asyncGet() {
     try {
         if(n > options.length-1) {
