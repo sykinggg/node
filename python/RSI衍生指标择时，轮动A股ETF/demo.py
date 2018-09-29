@@ -165,11 +165,11 @@ def before_trading_start(context):
      
     if g.sellDict != {}:
         message = '卖 ' + g.sellDict.keys()[0]
-        print message
+        print(message)
         send_message(message, channel = 'weixin')
     if g.buyDict != {}:
         message = '买 ' + g.buyDict.keys()[0]    
-        print message
+        print(message)
         send_message(message, channel = 'weixin')
                 
 ####每天开盘后####===================================================
