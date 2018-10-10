@@ -4,12 +4,14 @@ import { AppService } from './app.service';
 import { TestModule } from './test/test.module';
 import { DatabaseModule } from './data-base/dataBase.module';
 import { CatsModule } from './cats/cats.module';
+import { PicModule } from './pic/pic.module';
 
 @Module({
     imports: [
         TestModule,
         DatabaseModule,
         CatsModule,
+        PicModule,
     ],
     controllers: [AppController],
     providers: [AppService],
