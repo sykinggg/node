@@ -18,7 +18,7 @@ export class PicService {
         'jiandan': {
             head: 'http://jandan.net/ooxx/page-',
             foot: '',
-            length: 5,
+            length: 48,
         },
     };
 
@@ -33,7 +33,7 @@ export class PicService {
     n = 0;
     imgsrc = [];
     picAdd = [];
-    async get5aavPic(type) {
+    async get5aavPic(type): Promise<any> {
         if (!this.picAdd || !this.picAdd.length) {
             this.picAdd = this.getPicAdd(type);
         }
@@ -60,18 +60,30 @@ export class PicService {
         console.log('第' + idx + '个页面准备');
         if (type === '5aav') {
             $('.postlist img').each((i, ele) => {
-                this.imgsrc.push('http://www.5aav.com' + $('.postlist img').attr('data-original'));
+                const imgUrl = $(ele).attr('data-original');
+                if (imgUrl) {
+                    this.imgsrc.push('http://www.5aav.com' + imgUrl);
+                }
             });
         } else if (type === 'jiandan') {
-            $('.commentlist img').each((i, ele) => {
-                this.imgsrc.push($('.commentlist img').attr('src'));
-            });
+            // const imglist = document.getElementsByTagName('img');
+            // console.log($('.commentlist img'));
+            // $('.commentlist img').each((i, ele) => {
+            //     // if (ele.currentSrc) {
+            //     //     console.log(ele.currentSrc);
+            //     //     this.imgsrc.push(ele.currentSrc);
+            //     // }
+            //     console.log($(ele).attr('currentSrc'));
+            //     console.log(ele.currentSrc);
+            this.imgsrc.push($('.commentlist img').attr('src'));
+            // });
         }
         console.log('第' + idx + '个页面完成');
         this.n++;
         await instance.exit();
         this.get5aavPic(type);
-        console.log(this.imgsrc);
+        // console.log(this.imgsrc);
+        // return this.imgsrc;
     }
 
     async findAllPic(type): Promise<Pic[]> {

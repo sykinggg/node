@@ -8,5 +8,6 @@ import { DatabaseModule } from 'data-base/dataBase.module';
     imports: [DatabaseModule],
     controllers: [PicController],
     providers: [PicService, ...PicProviders],
+    exports: [PicService],
 })
 export class PicModule {}
