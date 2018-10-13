@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { Pic } from './interfaces/pic.interface';
 import * as phantom from 'phantom';
 import * as cheerio from 'cheerio';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable()
 export class PicService {
@@ -13,7 +14,7 @@ export class PicService {
         '5aav': {
             head: 'http://www.5aav.com/xgmv/list_1_',
             foot: '.html',
-            length: 56,
+            length: 2,
         },
         'jiandan': {
             head: 'http://jandan.net/ooxx/page-',
@@ -21,6 +22,8 @@ export class PicService {
             length: 48,
         },
     };
+
+    public subject: Subject<any> = new Subject<any>();
 
     private getPicAdd(type): any {
         const options = [];
@@ -41,8 +44,9 @@ export class PicService {
             console.log(this.imgsrc);
             console.log('完成');
             this.imgsrc = [...new Set(this.imgsrc)];
-            const createPic = new this.picModel({ address: this.imgsrc, name: type });
-            await createPic.save();
+            // const createPic = new this.picModel({ address: this.imgsrc, name: type });
+            // await createPic.save();
+            this.setChangeData(true);
             return this.imgsrc;
         }
         const instance = await phantom.create();
@@ -66,6 +70,12 @@ export class PicService {
                 }
             });
         } else if (type === 'jiandan') {
+            $('.text img').each((i, ele) => {
+                const imgUrl = $(ele).attr('src');
+                if (imgUrl) {
+                    this.imgsrc.push(imgUrl);
+                }
+            });
             // const imglist = document.getElementsByTagName('img');
             // console.log($('.commentlist img'));
             // $('.commentlist img').each((i, ele) => {
@@ -75,15 +85,21 @@ export class PicService {
             //     // }
             //     console.log($(ele).attr('currentSrc'));
             //     console.log(ele.currentSrc);
-            this.imgsrc.push($('.commentlist img').attr('src'));
+            // this.imgsrc.push($('.commentlist img').attr('src'));
             // });
         }
         console.log('第' + idx + '个页面完成');
         this.n++;
         await instance.exit();
         this.get5aavPic(type);
-        // console.log(this.imgsrc);
-        // return this.imgsrc;
+        console.log(this.imgsrc);
+    }
+
+    public setChangeData(data): void {
+        this.subject.next({ changeData: data });
+    }
+    public getChangeData(): Observable<any> {
+        return this.subject.asObservable();
     }
 
     async findAllPic(type): Promise<Pic[]> {

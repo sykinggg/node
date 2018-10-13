@@ -6,6 +6,7 @@ import { DatabaseModule } from './data-base/dataBase.module';
 import { CatsModule } from './cats/cats.module';
 import { PicModule } from './pic/pic.module';
 import { WsModule } from './ws/ws.module';
+import { StockModule } from './stock/stock.module';
 
 @Module({
     imports: [
@@ -14,6 +15,7 @@ import { WsModule } from './ws/ws.module';
         CatsModule,
         PicModule,
         WsModule,
+        StockModule,
     ],
     controllers: [AppController],
     providers: [AppService],

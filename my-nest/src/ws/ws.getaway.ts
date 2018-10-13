@@ -12,14 +12,23 @@ export class EventsGateway {
     @SubscribeMessage('events')
     onEvent(client, data): Observable<WsResponse<any>> {
         console.log(data);
-        const a = new BehaviorSubject(false);
-        this.picService.get5aavPic('5aav').then(res => {
-            console.log(res);
-            a.next(res);
+        const a: BehaviorSubject<any[]> = new BehaviorSubject([]);
+        this.picService.get5aavPic('5aav');
+        this.picService.getChangeData().subscribe(res => {
+            if (res) {
+                this.picService.findAllPic('5aav').then((calldata: any) => {
+                    a.next(calldata);
+                });
+            }
         });
         return a.pipe(map(item => {
             console.log(item);
-            return { event: 'events', data: a};
+            return { event: 'events', data: item };
         }));
+    }
+
+    @SubscribeMessage('stock')
+    onStock(client, data): Observable<WsResponse<any>> {
+        return of({ event: 'stock', data: [] });
     }
 }
