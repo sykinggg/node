@@ -1,4 +1,4 @@
-import { Controller, Get, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Delete, Req, UseInterceptors, FileInterceptor, UploadedFile, Post, Body } from '@nestjs/common';
 import { Pic } from './interfaces/pic.interface';
 import { PicService } from './pic.service';
 
@@ -20,5 +20,12 @@ export class PicController {
     @Delete('all')
     async deleteAll(): Promise<any> {
         return await this.picService.deleteAll();
+    }
+
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    UploadedFile(@UploadedFile() file, @Body() body) {
+        console.log(file);
+        console.log(body);
     }
 }

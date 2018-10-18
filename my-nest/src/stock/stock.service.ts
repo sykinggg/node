@@ -10,7 +10,7 @@ export class StockService {
 
     stockUrl = 'http://hq.sinajs.cn/list=code';
     async stock(res): Promise<any> {
-        
+
         return [];
     }
 }

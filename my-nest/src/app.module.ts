@@ -7,6 +7,7 @@ import { CatsModule } from './cats/cats.module';
 import { PicModule } from './pic/pic.module';
 import { WsModule } from './ws/ws.module';
 import { StockModule } from './stock/stock.module';
+import { HuobiModule } from './huobi/huobi.module';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { StockModule } from './stock/stock.module';
         PicModule,
         WsModule,
         StockModule,
+        HuobiModule,
     ],
     controllers: [AppController],
     providers: [AppService],
