@@ -1,5 +1,6 @@
 import { Injectable, Inject, HttpService } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { of } from 'rxjs';
 
 @Injectable()
 export class HuobiService {
@@ -12,6 +13,6 @@ export class HuobiService {
 
     public getText(): any {
         const url = this.BASE_URL + '/market/depth?symbol=xrp,btc&type=step0';
-        return this.httpService.get(url);
+        return of(this.httpService.get(url));
     }
 }

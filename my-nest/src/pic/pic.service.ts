@@ -14,12 +14,17 @@ export class PicService {
         '5aav': {
             head: 'http://www.5aav.com/xgmv/list_1_',
             foot: '.html',
-            length: 2,
+            length: 56,
         },
         'jiandan': {
             head: 'http://jandan.net/ooxx/page-',
             foot: '',
             length: 48,
+        },
+        'mmJpg': {
+            head: 'http://www.mmjpg.com/tag/meitui/',
+            foot: '',
+            length: 12,
         },
     };
 
@@ -44,8 +49,7 @@ export class PicService {
             console.log(this.imgsrc);
             console.log('完成');
             this.imgsrc = [...new Set(this.imgsrc)];
-            // const createPic = new this.picModel({ address: this.imgsrc, name: type });
-            // await createPic.save();
+            this.setData(type);
             this.setChangeData(true);
             return this.imgsrc;
         }
@@ -76,23 +80,39 @@ export class PicService {
                     this.imgsrc.push(imgUrl);
                 }
             });
-            // const imglist = document.getElementsByTagName('img');
-            // console.log($('.commentlist img'));
-            // $('.commentlist img').each((i, ele) => {
-            //     // if (ele.currentSrc) {
-            //     //     console.log(ele.currentSrc);
-            //     //     this.imgsrc.push(ele.currentSrc);
-            //     // }
-            //     console.log($(ele).attr('currentSrc'));
-            //     console.log(ele.currentSrc);
-            // this.imgsrc.push($('.commentlist img').attr('src'));
-            // });
+        } else if (type === 'mmJpg') {
+            $('.pic img').each((i, elem) => {
+                const imgUrl = $(elem).attr('src');
+                if (imgUrl) {
+                    this.imgsrc.push(imgUrl);
+                }
+            });
         }
         console.log('第' + idx + '个页面完成');
         this.n++;
         await instance.exit();
         this.get5aavPic(type);
         console.log(this.imgsrc);
+    }
+
+    public setData(type): void {
+        const oldModal = this.picModel.find({ name: type }).exec();
+        oldModal.then(res => {
+            // console.log(res);
+            if (res && res.length) {
+                // updateOne，updateMany，bulkWrite
+                this.picModel.updateOne({ name: type }, { address: this.imgsrc }, {}, (err, raw) => {
+                    // console.log(err);
+                    // console.log(raw);
+                });
+            } else {
+                const createPic = new this.picModel({ address: this.imgsrc, name: type });
+                createPic.save();
+            }
+            // this.picModel.find({ name: type }).exec().then(data => {
+            //     console.log(data);
+            // });
+        });
     }
 
     public setChangeData(data): void {
@@ -104,6 +124,10 @@ export class PicService {
 
     async findAllPic(type): Promise<Pic[]> {
         return await this.picModel.find({ name: type }).exec();
+    }
+
+    async deleteOne(type): Promise<any> {
+        return await this.picModel.remove({ name: type });
     }
 
     async deleteAll(): Promise<any> {

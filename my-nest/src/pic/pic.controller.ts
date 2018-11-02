@@ -22,6 +22,11 @@ export class PicController {
         return await this.picService.deleteAll();
     }
 
+    @Delete('one')
+    async deleteOne(@Req() request): Promise<any> {
+        return await this.picService.deleteOne(request.query.type);
+    }
+
     @Post('upload')
     @UseInterceptors(FileInterceptor('file'))
     UploadedFile(@UploadedFile() file, @Body() body) {
