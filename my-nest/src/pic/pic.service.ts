@@ -41,7 +41,7 @@ export class PicService {
     n = 0;
     imgsrc = [];
     picAdd = [];
-    async get5aavPic(type): Promise<any> {
+    async getPic(type): Promise<any> {
         if (!this.picAdd || !this.picAdd.length) {
             this.picAdd = this.getPicAdd(type);
         }
@@ -91,22 +91,22 @@ export class PicService {
         console.log('第' + idx + '个页面完成');
         this.n++;
         await instance.exit();
-        this.get5aavPic(type);
+        this.getPic(type);
         console.log(this.imgsrc);
     }
 
-    public setData(type): void {
+    public setData(type, data?): void {
         const oldModal = this.picModel.find({ name: type }).exec();
         oldModal.then(res => {
             // console.log(res);
             if (res && res.length) {
                 // updateOne，updateMany，bulkWrite
-                this.picModel.updateOne({ name: type }, { address: this.imgsrc }, {}, (err, raw) => {
+                this.picModel.updateOne({ name: type }, { address: data || this.imgsrc }, {}, (err, raw) => {
                     // console.log(err);
                     // console.log(raw);
                 });
             } else {
-                const createPic = new this.picModel({ address: this.imgsrc, name: type });
+                const createPic = new this.picModel({ address: data || this.imgsrc, name: type });
                 createPic.save();
             }
             // this.picModel.find({ name: type }).exec().then(data => {
@@ -122,7 +122,7 @@ export class PicService {
         return this.subject.asObservable();
     }
 
-    async findAllPic(type): Promise<Pic[]> {
+    async findType(type): Promise<Pic[]> {
         return await this.picModel.find({ name: type }).exec();
     }
 
@@ -132,5 +132,11 @@ export class PicService {
 
     async deleteAll(): Promise<any> {
         return await this.picModel.remove();
+    }
+
+    async uploadedFile(file): Promise<any> {
+        console.log(file);
+        await this.setData('file', file);
+        return 'success';
     }
 }

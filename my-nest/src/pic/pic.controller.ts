@@ -9,12 +9,12 @@ export class PicController {
     @Get('picSet')
     async picSet(@Req() request): Promise<any> {
         console.log(request.query);
-        return await this.picService.get5aavPic(request.query.type);
+        return await this.picService.getPic(request.query.type);
     }
 
     @Get('5aavGet')
     async find5All(@Req() request): Promise<any> {
-        return await this.picService.findAllPic(request.query.type);
+        return await this.picService.findType(request.query.type);
     }
 
     @Delete('all')
@@ -31,6 +31,6 @@ export class PicController {
     @UseInterceptors(FileInterceptor('file'))
     UploadedFile(@UploadedFile() file, @Body() body) {
         console.log(file);
-        console.log(body);
+        return this.picService.uploadedFile(file);
     }
 }
