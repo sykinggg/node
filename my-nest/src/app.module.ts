@@ -8,6 +8,7 @@ import { PicModule } from './pic/pic.module';
 import { WsModule } from './ws/ws.module';
 import { StockModule } from './stock/stock.module';
 import { HuobiModule } from './huobi/huobi.module';
+import { TushareModule } from './tushare/tushare.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { HuobiModule } from './huobi/huobi.module';
         WsModule,
         StockModule,
         HuobiModule,
+        TushareModule,
     ],
     controllers: [AppController],
     providers: [AppService],
