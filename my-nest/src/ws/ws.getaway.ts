@@ -13,10 +13,10 @@ export class EventsGateway {
     onEvent(client, data): Observable<WsResponse<any>> {
         console.log(data);
         const a: BehaviorSubject<any[]> = new BehaviorSubject([]);
-        this.picService.get5aavPic('5aav');
+        this.picService.getPic('5aav');
         this.picService.getChangeData().subscribe(res => {
             if (res) {
-                this.picService.findAllPic('5aav').then((calldata: any) => {
+                this.picService.getPic('5aav').then((calldata: any) => {
                     a.next(calldata);
                 });
             }
