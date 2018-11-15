@@ -1,9 +1,13 @@
-import { Injectable, HttpService } from '@nestjs/common';
+import { Injectable, HttpService, Inject } from '@nestjs/common';
 import { map } from 'rxjs/operators';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class TushareService {
-    constructor(private readonly httpService: HttpService) { }
+    constructor(
+        private readonly httpService: HttpService,
+        @Inject('StockModelToken') private readonly StockModel: Model<any>,
+    ) { }
 
     public baseUrl = 'http://api.tushare.pro';
     public baseOption = {
@@ -20,9 +24,34 @@ export class TushareService {
         },
     };
 
-    public postTextList(req) {
-        return this.httpService.post(this.baseUrl, this.baseOption, this.httpSet).pipe(map(res => {
-            return res.data;
+    public storkBaseUrl(req) {
+        if (!req) {
+            req = this.baseOption;
+        }
+        return this.httpService.post(this.baseUrl, req, this.httpSet).pipe(map(res => {
+            let returnData = res.data;
+            if (+res.data.code === 0) {
+                this.setData(req.api_name, res.data.data);
+            }
+            returnData = this.StockModel.find({ name: req.api_name }).exec();
+            return returnData;
         }));
+    }
+
+    public setData(type, dataObj?): void {
+        const oldModal = this.StockModel.find({ name: type }).exec();
+        oldModal.then(res => {
+            // console.log(res);
+            if (res && res.length) {
+                // updateOne，updateMany，bulkWrite
+                this.StockModel.updateOne({ name: type }, { data: dataObj }, {}, (err, raw) => {
+                    // console.log(err);
+                    // console.log(raw);
+                });
+            } else {
+                const createPic = new this.StockModel({ data: dataObj, name: type });
+                createPic.save();
+            }
+        });
     }
 }

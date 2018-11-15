@@ -1,10 +1,12 @@
 import { Module, HttpModule } from '@nestjs/common';
 import { TushareController } from './tushare.controller';
 import { TushareService } from './tushare.service';
-
+import { StockListProviders } from './tushare.providers';
+import { DatabaseModule } from 'data-base/dataBase.module';
 @Module({
-    imports: [HttpModule],
+    imports: [HttpModule, DatabaseModule],
     controllers: [TushareController],
-    providers: [TushareService],
+    providers: [TushareService, ...StockListProviders],
+    exports: [TushareService],
 })
 export class TushareModule { }
