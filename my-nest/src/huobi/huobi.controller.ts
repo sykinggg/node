@@ -7,9 +7,6 @@ export class HuobiController {
 
     @Get('text')
     async houbiText(@Req() request): Promise<any> {
-        this.huobiService.getText().subscribe(res => {
-            console.log(res);
-        });
-        return [];
+        return this.huobiService.getText();
     }
 }
