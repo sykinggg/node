@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { map } from '../../node_modules/rxjs/operators';
 
 import * as crypto from 'crypto';
+import * as moment from 'moment';
 import * as ccxt from 'ccxt';
 
 // Access Key
@@ -186,20 +187,21 @@ export class HuobiService {
     // 查询用户的所有账户状态
     public v1AccountAccounts(body): any {
         const urlStr = 'GET\napi.huobi.br.com\n/v1/account/accounts\n';
-        const pStr = 'AccessKeyId=811eec14-7f418b58-cd06ef2e-b2da9&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2017-05-11T16:22:06';
+        let time = moment().utc().format();
+        time = time.substr(0, time.length - 1)
+        const pStr = 'AccessKeyId=811eec14-7f418b58-cd06ef2e-b2da9&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=' + time;
         const str = urlStr + pStr;
         const signature = crypto.createHmac('sha1', this.SECRET_KEY).update(str).digest().toString('base64');
         const url = this.BASE_URL + '/v1/account/accounts?' + pStr + '&Signature=' + signature;
         console.log('console.log(signature);');
-        console.log(signature);
-        console.log(Date.now());
+        console.log(url);
         return this.httpService.get(url).pipe(map((res: any) => {
             let returnData = [];
             console.log(res.data);
             if (+res.status === 200) {
                 returnData = res.data;
             }
-            return signature;
+            return returnData;
         }));
     }
 }
