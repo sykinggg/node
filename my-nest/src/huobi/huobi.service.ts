@@ -184,17 +184,24 @@ export class HuobiService {
      *  签名请求(账户查询&交易)
      */
 
+    textBASE_URL = 'http://api.hadax.com';
+    HEADERS = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
+    };
+
     // 查询用户的所有账户状态
     public v1AccountAccounts(body): any {
-        const urlStr = 'GET\napi.huobi.br.com\n/v1/account/accounts\n';
-        let time = moment().utc().format();
-        time = time.substr(0, time.length - 1)
-        const pStr = 'AccessKeyId=811eec14-7f418b58-cd06ef2e-b2da9&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=' + time;
-        const str = urlStr + pStr;
-        const signature = crypto.createHmac('sha1', this.SECRET_KEY).update(str).digest().toString('base64');
-        const url = this.BASE_URL + '/v1/account/accounts?' + pStr + '&Signature=' + signature;
+        const urlStr = 'GET\napi.hadax.com\n/v1/account/accounts\n';
+        const time = moment().utc().format('YYYY-MM-DDTHH:mm:ss');
+        const pStrArr = ['AccessKeyId=811eec14-7f418b58-cd06ef2e-b2da9', 'SignatureMethod=HmacSHA256', 'SignatureVersion=2', 'Timestamp=' + time];
+        const pStr = pStrArr.sort().join('&');
+        let str = urlStr + pStr;
+        str = encodeURI(str);
+        const signature = crypto.createHmac('sha256', this.SECRET_KEY).update(str).digest().toString('base64');
+        const url = this.textBASE_URL + '/v1/account/accounts?' + pStr + '&Signature=' + signature;
         console.log('console.log(signature);');
-        console.log(url);
+        console.log(signature);
         return this.httpService.get(url).pipe(map((res: any) => {
             let returnData = [];
             console.log(res.data);
