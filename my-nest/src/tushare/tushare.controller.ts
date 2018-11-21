@@ -9,5 +9,4 @@ export class TushareController {
     async storkBaseUrl(@Body() request): Promise<any> {
         return this.tushareService.storkBaseUrl(request);
     }
-
 }

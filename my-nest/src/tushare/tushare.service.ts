@@ -12,7 +12,7 @@ export class TushareService {
     public baseUrl = 'http://api.tushare.pro';
     public baseOption = {
         api_name: 'stock_basic',
-        token: '05e2421bfbccb31a09a5009e9b00950fd14615a02dca4eb077e9c3f4',
+        token: '304bd4b4830d85adf5bee28ae7cc6fe79a5c72e3022f6ca816b83894',
         params: {
             list_status: 'L',
         },
@@ -30,7 +30,7 @@ export class TushareService {
         }
         return this.httpService.post(this.baseUrl, req, this.httpSet).pipe(map(res => {
             let returnData = res.data;
-            if (+res.data.code === 0) {
+            if (+res.data.code === 0 && res.data.data.items && res.data.data.items.length) {
                 this.setData(req.api_name, res.data.data);
             }
             returnData = this.StockModel.find({ name: req.api_name }).exec();
@@ -41,7 +41,6 @@ export class TushareService {
     public setData(type, dataObj?): void {
         const oldModal = this.StockModel.find({ name: type }).exec();
         oldModal.then(res => {
-            // console.log(res);
             if (res && res.length) {
                 // updateOne，updateMany，bulkWrite
                 this.StockModel.updateOne({ name: type }, { data: dataObj }, {}, (err, raw) => {
