@@ -41,4 +41,28 @@ export class TushareController {
     async newShare(@Body() body): Promise<any> {
         return this.tushareService.newShare(body);
     }
+
+    // 日线行情
+    @Post('daily')
+    async daily(@Body() body): Promise<any> {
+        return this.tushareService.daily(body);
+    }
+
+    // 复权因子
+    @Post('adjFactor')
+    async adjFactor(@Body() body): Promise<any> {
+        return this.tushareService.adjFactor(body);
+    }
+
+    // 停复牌信息
+    @Post('suspend')
+    async suspend(@Body() body): Promise<any> {
+        return this.tushareService.suspend(body);
+    }
+
+    // 沪深港通资金流向
+    @Post('moneyflowHsgt')
+    async moneyflowHsgt(@Body() body): Promise<any> {
+        return this.tushareService.moneyflowHsgt(body);
+    }
 }
