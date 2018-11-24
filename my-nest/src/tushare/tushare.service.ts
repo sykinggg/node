@@ -77,6 +77,21 @@ export class TushareService {
                 trade_date: '20180725',
             },
         },
+        hsgtTop10Url: {
+            api_name: 'hsgt_top10',
+            token: this.baseToken,
+            params: {
+                trade_date: '20180725',
+                market_type: '1'
+            }
+        },
+        ggtTop10Url: {
+            api_name: 'ggt_top10',
+            token: this.baseToken,
+            params: {
+                trade_date: '20180727'
+            }
+        },
     };
     public httpSet = {
         headers: {
@@ -150,6 +165,20 @@ export class TushareService {
     async moneyflowHsgt(params) {
         if (!params || JSON.stringify(params) === '{}') {
             params = this.option.moneyflowHsgtUrl;
+        }
+        return this.basePost(params);
+    }
+
+    async hsgtTop10(params) {
+        if (!params || JSON.stringify(params) === '{}') {
+            params = this.option.hsgtTop10Url;
+        }
+        return this.basePost(params);
+    }
+
+    async ggtTop10(params) {
+        if (!params || JSON.stringify(params) === '{}') {
+            params = this.option.ggtTop10Url;
         }
         return this.basePost(params);
     }

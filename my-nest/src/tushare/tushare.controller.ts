@@ -65,4 +65,16 @@ export class TushareController {
     async moneyflowHsgt(@Body() body): Promise<any> {
         return this.tushareService.moneyflowHsgt(body);
     }
+
+    // 沪深股通十大成交股
+    @Post('hsgtTop10')
+    async hsgtTop10(@Body() body): Promise<any> {
+        return this.tushareService.hsgtTop10(body);
+    }
+
+    // 港股通十大成交股
+    @Post('ggtTop10')
+    async ggtTop10(@Body() body): Promise<any> {
+        return this.tushareService.ggtTop10(body);
+    }
 }
