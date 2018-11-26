@@ -73,8 +73,43 @@ export class TushareController {
     }
 
     // 港股通十大成交股
-    @Post('ggtTop10')
+    @Post('ggt_top10')
     async ggtTop10(@Body() body): Promise<any> {
         return this.tushareService.ggtTop10(body);
+    }
+
+    // 融资融券交易汇总
+    @Post('margin')
+    async margin(@Body() body): Promise<any> {
+        return this.tushareService.margin(body);
+    }
+
+    // 融资融券交易明细
+    @Post('margin_detail')
+    async marginDetail(@Body() body): Promise<any> {
+        return this.tushareService.marginDetail(body);
+    }
+
+    // 前十大股东
+    @Post('top10_holders')
+    async top10Holders(@Body() body): Promise<any> {
+        return this.tushareService.top10Holders(body);
+    }
+
+    // 前十大流通股东
+    @Post('top10_floatholders')
+    async top10Floatholders(@Body() body): Promise<any> {
+        return this.tushareService.top10Floatholders(body);
+    }
+
+    // 指数基本信息
+    @Post('index_basic')
+    async indexBasic(@Body() body): Promise<any> {
+        return this.tushareService.indexBasic(body);
+    }
+
+    @Post('index_daily')
+    async indexDaily(@Body() body): Promise<any> {
+        return this.tushareService.indexDaily(body);
     }
 }

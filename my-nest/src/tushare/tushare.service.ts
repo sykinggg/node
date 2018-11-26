@@ -82,15 +82,65 @@ export class TushareService {
             token: this.baseToken,
             params: {
                 trade_date: '20180725',
-                market_type: '1'
-            }
+                market_type: '1',
+            },
         },
         ggtTop10Url: {
             api_name: 'ggt_top10',
             token: this.baseToken,
             params: {
-                trade_date: '20180727'
-            }
+                ts_code: '00700',
+                start_date: '20180701',
+                end_date: '20180727',
+            },
+        },
+        marginUrl: {
+            api_name: 'margin',
+            token: this.baseToken,
+            params: {
+                trade_date: '20180802',
+            },
+        },
+        marginDetailUrl: {
+            api_name: 'margin_detail',
+            token: this.baseToken,
+            params: {
+                trade_date: '20180802',
+            },
+        },
+        top10HolderslUrl: {
+            api_name: 'top10_holders',
+            token: this.baseToken,
+            params: {
+                ts_code: '600000.SH',
+                start_date: '20170101',
+                end_date: '20171231',
+            },
+        },
+        top10FloatholdersUrl: {
+            api_name: 'top10_floatholders',
+            token: this.baseToken,
+            params: {
+                ts_code: '600000.SH',
+                start_date: '20170101',
+                end_date: '20171231',
+            },
+        },
+        indexBasicUrl: {
+            api_name: 'index_basic',
+            token: this.baseToken,
+            params: {
+                market: 'SW',
+            },
+        },
+        indexDailyUrl: {
+            api_name: 'index_daily',
+            token: this.baseToken,
+            params: {
+                ts_code: '399300.SZ',
+                start_date: '201801010',
+                end_date: '20181010',
+            },
         },
     };
     public httpSet = {
@@ -179,6 +229,48 @@ export class TushareService {
     async ggtTop10(params) {
         if (!params || JSON.stringify(params) === '{}') {
             params = this.option.ggtTop10Url;
+        }
+        return this.basePost(params);
+    }
+
+    async margin(params) {
+        if (!params || JSON.stringify(params) === '{}') {
+            params = this.option.marginUrl;
+        }
+        return this.basePost(params);
+    }
+
+    async marginDetail(params) {
+        if (!params || JSON.stringify(params) === '{}') {
+            params = this.option.marginDetailUrl;
+        }
+        return this.basePost(params);
+    }
+
+    async top10Holders(params) {
+        if (!params || JSON.stringify(params) === '{}') {
+            params = this.option.top10HolderslUrl;
+        }
+        return this.basePost(params);
+    }
+
+    async top10Floatholders(params) {
+        if (!params || JSON.stringify(params) === '{}') {
+            params = this.option.top10FloatholdersUrl;
+        }
+        return this.basePost(params);
+    }
+
+    async indexBasic(params) {
+        if (!params || JSON.stringify(params) === '{}') {
+            params = this.option.indexBasicUrl;
+        }
+        return this.basePost(params);
+    }
+
+    async indexDaily(params) {
+        if (!params || JSON.stringify(params) === '{}') {
+            params = this.option.indexDailyUrl;
         }
         return this.basePost(params);
     }
