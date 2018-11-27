@@ -12,7 +12,7 @@ export class PicController {
         return await this.picService.getPic(request.query.type);
     }
 
-    @Get('5aavGet')
+    @Get('dataFind')
     async find5All(@Req() request): Promise<any> {
         return await this.picService.findType(request.query.type);
     }

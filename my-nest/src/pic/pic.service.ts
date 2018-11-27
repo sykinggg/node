@@ -26,6 +26,11 @@ export class PicService {
             foot: '',
             length: 12,
         },
+        'movie': {
+            head: 'http://www.xfyy406.com/wuma/index',
+            foot: '.html',
+            length: 1499,
+        },
     };
 
     public subject: Subject<any> = new Subject<any>();
@@ -33,7 +38,11 @@ export class PicService {
     private getPicAdd(type): any {
         const options = [];
         for (let i = 1; i < this.url[type].length; i++) {
-            options.push(this.url[type].head + i + this.url[type].foot);
+            if (i !== 1 || type !== 'movie') {
+                options.push(this.url[type].head + i + this.url[type].foot);
+            } else {
+                options.push(this.url[type].head.replace('index', ''));
+            }
         }
         return options;
     }
@@ -87,12 +96,21 @@ export class PicService {
                     this.imgsrc.push(imgUrl);
                 }
             });
+        } else if (type === 'movie') {
+            $('.main .list ul li a').each((i, elem) => {
+                $(elem).find('p').each((pi, pelem) => {
+                    const name = unescape($(pelem).html().replace(/&#x/g, '%u').replace(/;/g, ''));
+                    const imgUrl = $(pelem).parent('a').find('img').attr('src');
+                    const detaHref = 'http://www.xfyy406.com' + $(pelem).parent('a').attr('href');
+                    this.imgsrc.push({name, imgUrl, detaHref});
+                });
+            });
         }
         console.log('第' + idx + '个页面完成');
         this.n++;
         await instance.exit();
         this.getPic(type);
-        console.log(this.imgsrc);
+        // console.log(this.imgsrc);
     }
 
     public setData(type, data?): void {
@@ -123,7 +141,9 @@ export class PicService {
     }
 
     async findType(type): Promise<Pic[]> {
-        return await this.picModel.find({ name: type }).exec();
+        return this.picModel.find({ name: type }).exec().then(data => {
+            return data[0];
+        });
     }
 
     async deleteOne(type): Promise<any> {
