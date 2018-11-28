@@ -26,10 +26,35 @@ export class PicService {
             foot: '',
             length: 12,
         },
-        'movie': {
+        'movie_shaofu': {
             head: 'http://www.xfyy406.com/shaofu/index',
             foot: '.html',
             length: 296,
+        },
+        'movie_texie': {
+            head: 'http://www.xfyy406.com/texie/index',
+            foot: '.html',
+            length: 106,
+        },
+        'movie_qunjiao': {
+            head: 'http://www.xfyy406.com/qunjiao/index',
+            foot: '.html',
+            length: 177,
+        },
+        'movie_yazhou': {
+            head: 'http://www.xfyy406.com/yazhou/index',
+            foot: '.html',
+            length: 2109,
+        },
+        'movie_luanlun': {
+            head: 'http://www.xfyy406.com/luanlun/index',
+            foot: '.html',
+            length: 525,
+        },
+        'movie_zhongwen': {
+            head: 'http://www.xfyy406.com/zhongwen/index',
+            foot: '.html',
+            length: 952,
         },
     };
 
@@ -132,7 +157,7 @@ export class PicService {
                     this.imgsrc.push(imgUrl);
                 }
             });
-        } else if (this.type === 'movie') {
+        } else if (this.type.indexOf('movie')+1) {
             $('.main .list ul li a').each((i, elem) => {
                 $(elem).find('p').each((pi, pelem) => {
                     const name = unescape($(pelem).html().replace(/&#x/g, '%u').replace(/;/g, ''));
