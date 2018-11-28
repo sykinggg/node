@@ -6,10 +6,10 @@ import * as moment from 'moment';
 import * as HmacSHA256 from 'crypto-js/hmac-sha256';
 
 // Access Key
-// 811eec14-7f418b58-cd06ef2e-b2da9
+// 2b18d2ac-d2c0f3c5-fb330e3b-9ba5a
 
 // Secret Key
-// cec55738-d451ccf5-7a74965e-b06c7
+// 4ac2beda-8e9a9831-ee4c0018-c05d3
 @Injectable()
 export class HuobiService {
     constructor(
@@ -18,8 +18,8 @@ export class HuobiService {
     ) { }
 
     public URL_HUOBI_PRO = 'api.huobi.br.com';
-    public SECRET_KEY = 'cec55738-d451ccf5-7a74965e-b06c7';
-    public ACCESS_KEY = '811eec14-7f418b58-cd06ef2e-b2da9';
+    public SECRET_KEY = '4ac2beda-8e9a9831-ee4c0018-c05d3';
+    public ACCESS_KEY = '2b18d2ac-d2c0f3c5-fb330e3b-9ba5a';
 
     public NO_SIGNATURE_API = [
         'getCommonCurrencys',

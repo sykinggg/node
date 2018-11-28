@@ -27,15 +27,18 @@ export class PicService {
             length: 12,
         },
         'movie': {
-            head: 'http://www.xfyy406.com/wuma/index',
+            head: 'http://www.xfyy406.com/shaofu/index',
             foot: '.html',
-            length: 1499,
+            length: 296,
         },
     };
 
     public subject: Subject<any> = new Subject<any>();
 
+    type;
+
     private getPicAdd(type): any {
+        this.type = type;
         const options = [];
         for (let i = 1; i < this.url[type].length; i++) {
             if (i !== 1 || type !== 'movie') {
@@ -47,70 +50,104 @@ export class PicService {
         return options;
     }
 
-    n = 0;
-    imgsrc = [];
-    picAdd = [];
-    async getPic(type): Promise<any> {
+    getUrl(type, n?) {
+        this.imgsrc = [];
+        // tslint:disable-next-line:prefer-const
+        let urlArr = [], num;
+        if (!n) {
+            n = 3;
+        }
         if (!this.picAdd || !this.picAdd.length) {
             this.picAdd = this.getPicAdd(type);
         }
-        if (this.n > this.picAdd.length - 1) {
+        num = this.picAdd.length / n;
+        if (num % 1) {
+            // tslint:disable-next-line:no-bitwise
+            num = num | 0;
+            num++;
+        }
+        for (let i = 0; i < n; i++) {
+            urlArr[i] = this.picAdd.slice(i * num, (i + 1) * num);
+        }
+        this.useUrl(urlArr);
+    }
+
+    useUrl(list) {
+        if (!list.length) {
+            return false;
+        }
+        list.map(url => {
+            this.getPic(url);
+        });
+    }
+
+    n = 0;
+    imgsrc = [];
+    picAdd = [];
+    async getPic(urlList, n?): Promise<any> {
+        if (!n) {
+            n = 0;
+        }
+        if (this.n === this.picAdd.length) {
             console.log(this.imgsrc);
+            console.log(this.imgsrc.length);
             console.log('完成');
             this.imgsrc = [...new Set(this.imgsrc)];
-            this.setData(type);
+            this.setData(this.type);
             this.setChangeData(true);
-            return this.imgsrc;
+            this.n++;
+            return false;
+        }
+        if (this.n > this.picAdd.length) {
+            return false;
         }
         const instance = await phantom.create();
         const page = await instance.createPage();
         await page.on('onResourceRequested', (requestData) => {
             //   console.info('Requesting', requestData.url);
         });
-        const status = await page.open(this.picAdd[this.n]);
+        const status = await page.open(urlList[n]);
         const content = await page.property('content');
         const $ = cheerio.load(content);
         const idx = this.n + 1;
-        if (idx === 1) {
-            this.imgsrc = [];
-        }
-        console.log('第' + idx + '个页面准备');
-        if (type === '5aav') {
+        // console.log('第' + idx + '个页面准备');
+        if (this.type === '5aav') {
             $('.postlist img').each((i, ele) => {
                 const imgUrl = $(ele).attr('data-original');
                 if (imgUrl) {
                     this.imgsrc.push('http://www.5aav.com' + imgUrl);
                 }
             });
-        } else if (type === 'jiandan') {
+        } else if (this.type === 'jiandan') {
             $('.text img').each((i, ele) => {
                 const imgUrl = $(ele).attr('src');
                 if (imgUrl) {
                     this.imgsrc.push(imgUrl);
                 }
             });
-        } else if (type === 'mmJpg') {
+        } else if (this.type === 'mmJpg') {
             $('.pic img').each((i, elem) => {
                 const imgUrl = $(elem).attr('src');
                 if (imgUrl) {
                     this.imgsrc.push(imgUrl);
                 }
             });
-        } else if (type === 'movie') {
+        } else if (this.type === 'movie') {
             $('.main .list ul li a').each((i, elem) => {
                 $(elem).find('p').each((pi, pelem) => {
                     const name = unescape($(pelem).html().replace(/&#x/g, '%u').replace(/;/g, ''));
                     const imgUrl = $(pelem).parent('a').find('img').attr('src');
                     const detaHref = 'http://www.xfyy406.com' + $(pelem).parent('a').attr('href');
-                    this.imgsrc.push({name, imgUrl, detaHref});
+                    this.imgsrc.push({ name, imgUrl, detaHref });
                 });
             });
         }
         console.log('第' + idx + '个页面完成');
         this.n++;
+        n++;
         await instance.exit();
-        this.getPic(type);
-        // console.log(this.imgsrc);
+        this.getPic(urlList, n);
+        // console.log(this.imgsrc.length);
     }
 
     public setData(type, data?): void {
