@@ -26,32 +26,32 @@ export class PicService {
             foot: '',
             length: 12,
         },
-        'movie_shaofu': {
+        'movie_sf': {
             head: 'http://www.xfyy406.com/shaofu/index',
             foot: '.html',
             length: 296,
         },
-        'movie_texie': {
+        'movie_tx': {
             head: 'http://www.xfyy406.com/texie/index',
             foot: '.html',
             length: 106,
         },
-        'movie_qunjiao': {
+        'movie_qj': {
             head: 'http://www.xfyy406.com/qunjiao/index',
             foot: '.html',
             length: 177,
         },
-        'movie_yazhou': {
+        'movie_yz': {
             head: 'http://www.xfyy406.com/yazhou/index',
             foot: '.html',
             length: 2109,
         },
-        'movie_luanlun': {
+        'movie_ll': {
             head: 'http://www.xfyy406.com/luanlun/index',
             foot: '.html',
             length: 525,
         },
-        'movie_zhongwen': {
+        'movie_zw': {
             head: 'http://www.xfyy406.com/zhongwen/index',
             foot: '.html',
             length: 952,
@@ -65,8 +65,8 @@ export class PicService {
     private getPicAdd(type): any {
         this.type = type;
         const options = [];
-        for (let i = 1; i < this.url[type].length; i++) {
-            if (i !== 1 || type !== 'movie') {
+        for (let i = 1; i < this.url[type].length + 1; i++) {
+            if (i !== 1 || !(type.indexOf('movie') + 1)) {
                 options.push(this.url[type].head + i + this.url[type].foot);
             } else {
                 options.push(this.url[type].head.replace('index', ''));
@@ -77,6 +77,8 @@ export class PicService {
 
     getUrl(type, n?) {
         this.imgsrc = [];
+        this.picAdd = [];
+        this.n = 0;
         // tslint:disable-next-line:prefer-const
         let urlArr = [], num;
         if (!n) {
@@ -113,8 +115,7 @@ export class PicService {
         if (!n) {
             n = 0;
         }
-        if (this.n === this.picAdd.length) {
-            console.log(this.imgsrc);
+        if (this.n === this.picAdd.length + 1) {
             console.log(this.imgsrc.length);
             console.log('完成');
             this.imgsrc = [...new Set(this.imgsrc)];
@@ -123,7 +124,7 @@ export class PicService {
             this.n++;
             return false;
         }
-        if (this.n > this.picAdd.length) {
+        if (this.n > this.picAdd.length + 1) {
             return false;
         }
         const instance = await phantom.create();
@@ -157,7 +158,7 @@ export class PicService {
                     this.imgsrc.push(imgUrl);
                 }
             });
-        } else if (this.type.indexOf('movie')+1) {
+        } else if (this.type.indexOf('movie') + 1) {
             $('.main .list ul li a').each((i, elem) => {
                 $(elem).find('p').each((pi, pelem) => {
                     const name = unescape($(pelem).html().replace(/&#x/g, '%u').replace(/;/g, ''));

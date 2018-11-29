@@ -8,7 +8,6 @@ export class PicController {
 
     @Get('picSet')
     async picSet(@Req() request): Promise<any> {
-        console.log(request.query);
         return await this.picService.getUrl(request.query.type, 3);
     }
 
