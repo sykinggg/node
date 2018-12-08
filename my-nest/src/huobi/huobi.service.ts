@@ -1,6 +1,6 @@
 import { Injectable, Inject, HttpService } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { map } from '../../node_modules/rxjs/operators';
+import { map } from 'rxjs/internal/operators/map';
 import * as CryptoJS from 'crypto-js';
 import * as moment from 'moment';
 import * as HmacSHA256 from 'crypto-js/hmac-sha256';

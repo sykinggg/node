@@ -9,6 +9,7 @@ import { WsModule } from './ws/ws.module';
 import { StockModule } from './stock/stock.module';
 import { HuobiModule } from './huobi/huobi.module';
 import { TushareModule } from './tushare/tushare.module';
+import { WeatherModule } from './weather/weather.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { TushareModule } from './tushare/tushare.module';
         StockModule,
         HuobiModule,
         TushareModule,
+        WeatherModule,
     ],
     controllers: [AppController],
     providers: [AppService],
