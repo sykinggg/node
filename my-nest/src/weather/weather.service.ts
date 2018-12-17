@@ -8,6 +8,7 @@ import { map } from 'rxjs/internal/operators/map';
 
 @Injectable()
 export class WeatherService {
+    // https://www.seniverse.com/ 心知天气
     private APIKey: string;
     private UId: string;
     private url: string;
@@ -24,7 +25,7 @@ export class WeatherService {
 
     public getOne(bodyObj) {
         let url = this.url + '/weather/now.json?key=' + this.APIKey + '&location=' + bodyObj.params.addressStr + '&language=zh-Hans&unit=m';
-        console.log(url);
+        // console.log(url);
         url = encodeURI(url);
         return this.httpService.get(url).pipe(map((resp: any) => {
             // const res = JSON.parse(resp);
@@ -40,7 +41,7 @@ export class WeatherService {
         url += '&location=' + body.params.addressStr;
         url += '&start=' + body.params.start || 0;
         url += '&days=' + body.params.days || 5;
-        console.log(url);
+        // console.log(url);
         url = encodeURI(url);
         return this.httpService.get(url).pipe(map((resp: any) => {
             // const res = JSON.parse(resp);
@@ -53,7 +54,7 @@ export class WeatherService {
         let url = this.url + '/pro/weather/grid/now.json';
         url += '?key=' + this.APIKey;
         url += '&location=39.865927:116.359805';
-        console.log(url);
+        // console.log(url);
         url = encodeURI(url);
         return this.httpService.get(url).pipe(map((resp: any) => {
             // const res = JSON.parse(resp);
@@ -66,7 +67,7 @@ export class WeatherService {
         let url = this.url + '/pro/weather/grid/hourly3h.json';
         url += '?key=' + this.APIKey;
         url += '&location=39.865927:116.359805';
-        console.log(url);
+        // console.log(url);
         url = encodeURI(url);
         return this.httpService.get(url).pipe(map((resp: any) => {
             // const res = JSON.parse(resp);
@@ -79,7 +80,7 @@ export class WeatherService {
         let url = this.url + '/pro/weather/grid/hourly_history.json';
         url += '?key=' + this.APIKey;
         url += '&location=39.865927:116.359805';
-        console.log(url);
+        // console.log(url);
         url = encodeURI(url);
         return this.httpService.get(url).pipe(map((resp: any) => {
             // const res = JSON.parse(resp);
@@ -93,7 +94,7 @@ export class WeatherService {
         url += '?key=' + this.APIKey;
         url += '&language=zh-Hans';
         url += '&location=' + body.params.addressStr;
-        console.log(url);
+        // console.log(url);
         url = encodeURI(url);
         return this.httpService.get(url).pipe(map((resp: any) => {
             // const res = JSON.parse(resp);

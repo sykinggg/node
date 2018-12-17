@@ -4,6 +4,6 @@ export const DataBase = [
     {
         provide: 'DbConnectionToken',
         useFactory: async (): Promise<mongoose.Connection> =>
-            await mongoose.connect('mongodb://localhost:27018'),
+            await mongoose.connect('mongodb://localhost:27018', { useNewUrlParser: true }),
     },
 ];

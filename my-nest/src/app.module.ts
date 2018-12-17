@@ -10,6 +10,7 @@ import { StockModule } from './stock/stock.module';
 import { HuobiModule } from './huobi/huobi.module';
 import { TushareModule } from './tushare/tushare.module';
 import { WeatherModule } from './weather/weather.module';
+import { MapModule } from './map/map.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { WeatherModule } from './weather/weather.module';
         HuobiModule,
         TushareModule,
         WeatherModule,
+        MapModule,
     ],
     controllers: [AppController],
     providers: [AppService],
