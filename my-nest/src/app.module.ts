@@ -11,6 +11,7 @@ import { HuobiModule } from './huobi/huobi.module';
 import { TushareModule } from './tushare/tushare.module';
 import { WeatherModule } from './weather/weather.module';
 import { MapModule } from './map/map.module';
+import { MusicModule } from './music/music.module';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { MapModule } from './map/map.module';
         TushareModule,
         WeatherModule,
         MapModule,
+        MusicModule,
     ],
     controllers: [AppController],
     providers: [AppService],
