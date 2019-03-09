@@ -12,6 +12,7 @@ import { TushareModule } from './tushare/tushare.module';
 import { WeatherModule } from './weather/weather.module';
 import { MapModule } from './map/map.module';
 import { MusicModule } from './music/music.module';
+import { EconomicModule } from './economic/economic.module';
 
 @Module({
     imports: [
@@ -26,6 +27,7 @@ import { MusicModule } from './music/music.module';
         WeatherModule,
         MapModule,
         MusicModule,
+        EconomicModule,
     ],
     controllers: [AppController],
     providers: [AppService],
