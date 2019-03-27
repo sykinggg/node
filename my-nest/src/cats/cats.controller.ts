@@ -17,4 +17,9 @@ export class CatsController {
     async findAll(): Promise<Cat[]> {
         return this.catsService.findAll();
     }
+
+    @Get('/text')
+    async text(): Promise<any> {
+        return this.catsService.text();
+    }
 }

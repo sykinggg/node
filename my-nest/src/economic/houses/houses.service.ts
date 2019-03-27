@@ -183,8 +183,6 @@ export class HousesService {
             // tslint:disable-next-line:prefer-const
             let data: Array<any> = [];
             await $('.letter_city li').each((i, elem) => {
-                console.log(`$('.letter_city li').each((i, elem) => {`);
-                console.log(elem);
                 // tslint:disable-next-line:prefer-const
                 let child: Array<any> = [];
                 $($(elem).find('.city_list a')).each((si, selem) => {
@@ -219,12 +217,12 @@ export class HousesService {
         });
         const status = await page.open('https://www.ke.com/city/');
 
-        if (status === 'success' && false) {
+        if (status === 'success') {
             const content = await page.property('content');
             const $ = cheerio.load(content);
             // tslint:disable-next-line:prefer-const
             let data: Array<any> = [];
-            $('.city_list_ul .city_list_li').each((i, elem) => {
+            $('.city_list_ul .city_list_li .city_province').each((i, elem) => {
                 // tslint:disable-next-line:prefer-const
                 let child: Array<any> = [];
                 $(elem).find('.CLICKDATA').each((si, selem) => {
@@ -251,9 +249,35 @@ export class HousesService {
             return this.getData('grawlDataKeCity');
         }
     }
-    // 获取前端爬虫地址进行数据拉取
+    // 获取前端爬虫地址进行数据拉取 似乎是做了防爬取设置
+    grawlDataKeCityURLData: any;
     async grawlDataKeCityURL(body) {
-        console.log(body);
+        if (body.href) {
+            const instance = await phantom.create();
+            const page = await instance.createPage();
+            await page.on('onResourceRequested', (requestData) => {
+                //   console.info('Requesting', requestData.url);
+            });
+            // 不同类型的房屋信息
+            const url = body.href + '/' + body.flag.value;
+            const status = await page.open(url);
+            if (status === 'success') {
+                const content = await page.property('content');
+                const $ = cheerio.load(content);
+                // 获取总页数
+                const allPage = $($('.content__pg a')[$('.content__pg a').length - 2]).attr('data-page');
+                // const paginationOption = {
+                //     allPage,
+                //     baseHref: body.href + body.flag + '/',
+                //     indexPage: 1,
+                //     pagePrefix: 'pg',
+                //     type: body.name,
+                // };
+                this.grawlDataKeCityURLData = [];
+                // await this.pagination(paginationOption);
+                return '开始爬取';
+            }
+        }
     }
 
     // 数据写入数据库
@@ -281,7 +305,7 @@ export class HousesService {
     // 从数据库中取得数据
     public getData(type): Promise<any> {
         return this.HousesModule.find({ name: type }).exec().then(data => {
-            console.log(data);
+            // console.log(data);
             return data[0].data;
         });
     }
