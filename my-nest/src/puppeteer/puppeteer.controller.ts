@@ -8,11 +8,11 @@ export class PuppeteerController {
 
     @Post('/pic')
     async pic(@Body() data: any) {
-        this.puppeteerService.pic(data);
+        return this.puppeteerService.pic(data);
     }
 
-    @Post('/ftp')
-    async ftp(@Body() data: any) {
-        this.puppeteerService.ftp(data);
+    @Post('/pdf')
+    async pdf(@Body() data: any) {
+        return this.puppeteerService.pdf(data);
     }
 }
