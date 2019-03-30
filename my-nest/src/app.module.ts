@@ -13,6 +13,7 @@ import { WeatherModule } from './weather/weather.module';
 import { MapModule } from './map/map.module';
 import { MusicModule } from './music/music.module';
 import { EconomicModule } from './economic/economic.module';
+import { PuppeteerModule } from './puppeteer/puppeteer.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { EconomicModule } from './economic/economic.module';
         MapModule,
         MusicModule,
         EconomicModule,
+        PuppeteerModule,
     ],
     controllers: [AppController],
     providers: [AppService],

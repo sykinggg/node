@@ -1,1 +1,7 @@
 npm install --save @types/node@latest ts-node@latest --force
+
+yarn add @nestjs/common
+yarn add @nestjs/core
+yarn add @nestjs/mongoose
+yarn add @nestjs/websockets
+yarn add @nestjs/testing
