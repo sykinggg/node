@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
 import * as phantom from 'phantom';
 import * as cheerio from 'cheerio';
+import * as puppeteer from 'puppeteer';
 
 export interface Ipagination {
     allPage: number;
@@ -44,36 +45,113 @@ export class HousesService {
 
     // 获取链家城市
     async grawlDataLianjiaCity(body): Promise<any> {
-        const instance = await phantom.create();
-        const page = await instance.createPage();
-        await page.on('onResourceRequested', (requestData) => {
-            //   console.info('Requesting', requestData.url);
-        });
-        const status = await page.open('https://www.lianjia.com/city/');
-        if (status === 'success') {
-            const content = await page.property('content');
-            const $ = cheerio.load(content);
-            const data: any = [];
-            $('.city_list_ul .city_province').each((i, elem) => {
-                const subData: any = [];
-                $(elem).find('ul li a').each((si, sElem) => {
-                    subData.push({
-                        name: $(sElem).text(),
-                        href: $(sElem).attr('href'),
+        const browser = await (puppeteer.launch({ headless: true }));
+        const page = await browser.newPage();
+        await page.goto('https://www.lianjia.com/city/');
+        await page.waitFor(1000);
+
+        let data: any = await page.evaluate(() => {
+            const dataObj: any = [];
+            const city_province = document.querySelectorAll('.city_list_ul .city_province');
+            city_province.forEach(item => {
+                const sArr = [];
+                item.querySelectorAll('ul li a').forEach(sElem => {
+                    sArr.push({
+                        name: sElem.innerHTML,
+                        href: sElem.getAttribute('href'),
                     });
                 });
-                data.push({
-                    name: $(elem).find('.city_list_tit').text(),
-                    child: subData,
+                dataObj.push({
+                    name: item.querySelector('.city_list_tit').innerHTML,
+                    child: sArr,
                 });
             });
+            return dataObj;
+        });
+        if (data.length) {
             this.setData('grawlDataLianjiaCity', data);
-            await instance.exit();
-            return data;
         } else {
-            await instance.exit();
-            return this.getData('grawlDataLianjiaCity');
+            data = this.getData('grawlDataLianjiaCity');
         }
+        // page.$$('.city_list_ul .city_province').then(item => {
+        //     if (Array.isArray(item)) {
+        //         item.forEach(async elem => {
+        //             const city_list_tit = await elem.$eval('.city_list_tit', node => node.innerText);
+        //             const ulliaText = await elem.$eval('ul li a', node => node.innerText);
+        //             const ulliaHref = await elem.$eval('ul li a', node => node.href);
+        //             console.log(city_list_tit);
+        //             data.push({
+        //                 name: city_list_tit,
+        //                 child: [{
+        //                     name: ulliaText,
+        //                     href: ulliaHref,
+        //                 }],
+        //             });
+        //             // name: city_list_tit,
+        //             //     child: [{
+        //             //         name: ulliaText,
+        //             //         href: ulliaHref,
+        //             //     }],
+        //             // data.push({
+        //             //     name: await elem.$eval('.city_list_tit', node => node.innerText),
+        //             //     child: [{
+        //             //         name: await elem.$eval('ul li a', node => node.innerText),
+        //             //         href: await elem.$eval('ul li a', node => node.href),
+        //             //     }],
+        //             // });
+        //         });
+        //     }
+        // });
+        return data;
+        // const data = await page.evaluate(() => {
+        //     console.log(document.querySelectorAll('.city_list_ul .city_province'));
+        //     document.querySelectorAll('.city_list_ul .city_province').forEach((elem, i) => {
+        //         console.log(elem);
+        //         const subData: any = [];
+        //         elem.querySelectorAll('ul li a').forEach((sElem, si) => {
+        //             console.log(sElem.innerHTML);
+        //             subData.push({
+        //                 name: sElem.innerHTML,
+        //                 href: sElem.getAttribute('href'),
+        //             });
+        //         });
+        //         return {
+        //             name: elem.querySelector('.city_list_tit').innerHTML,
+        //             child: subData,
+        //         };
+        //     });
+        // });
+
+        // const instance = await phantom.create();
+        // const page = await instance.createPage();
+        // await page.on('onResourceRequested', (requestData) => {
+        //     //   console.info('Requesting', requestData.url);
+        // });
+        // const status = await page.open('https://www.lianjia.com/city/');
+        // if (status === 'success') {
+        //     const content = await page.property('content');
+        //     const $ = cheerio.load(content);
+        //     const data: any = [];
+        //     $('.city_list_ul .city_province').each((i, elem) => {
+        //         const subData: any = [];
+        //         $(elem).find('ul li a').each((si, sElem) => {
+        //             subData.push({
+        //                 name: $(sElem).text(),
+        //                 href: $(sElem).attr('href'),
+        //             });
+        //         });
+        //         data.push({
+        //             name: $(elem).find('.city_list_tit').text(),
+        //             child: subData,
+        //         });
+        //     });
+        //     this.setData('grawlDataLianjiaCity', data);
+        //     await instance.exit();
+        //     return data;
+        // } else {
+        //     await instance.exit();
+        //     return this.getData('grawlDataLianjiaCity');
+        // }
     }
 
     // 根据前端获取的地址获取数据
