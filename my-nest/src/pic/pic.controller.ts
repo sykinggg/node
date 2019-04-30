@@ -1,10 +1,11 @@
-import { Controller, Get, Delete, Req, UseInterceptors, FileInterceptor, UploadedFile, Post, Body } from '@nestjs/common';
+import { Controller, Get, Delete, Req, UseInterceptors, UploadedFile, Post, Body } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Pic } from './interfaces/pic.interface';
 import { PicService } from './pic.service';
 
 @Controller('pic')
 export class PicController {
-    constructor(private readonly picService: PicService) {}
+    constructor(private readonly picService: PicService) { }
 
     @Get('picSet')
     async picSet(@Req() request): Promise<any> {
