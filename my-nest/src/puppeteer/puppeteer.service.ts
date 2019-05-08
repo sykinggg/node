@@ -37,6 +37,32 @@ export class PuppeteerService {
         return result;
     }
 
+    async getData(data: any): Promise<any> {
+        const browser = await (puppeteer.launch({ headless: true }));
+        const page = await browser.newPage();
+        if (data.http) {
+            await page.goto(data.http);
+        }
+        await page.waitFor(data.waitFor || 1000);
+        const result = await page.evaluate((arg) => {
+            const returnData = []; // 初始化空数组来存储数据
+            for (const opt of arg.option) {
+                const elements = document.querySelectorAll(opt.selector); // 获取所有书籍元素
+                const opData = {};
+                opData[opt.name] = [];
+                for (const element of elements) {
+                    const domData = element[opt.attr]; // 获取数据
+                    opData[opt.name].push(domData);
+                    returnData.push(opData); // 存入数组
+                }
+            }
+
+            return returnData; // 返回数据
+        }, data);
+        await browser.close();
+        return result;
+    }
+
     public autoScroll(page: any) {
         return page.evaluate(() => {
             return new Promise((resolve, reject) => {

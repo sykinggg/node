@@ -15,4 +15,9 @@ export class PuppeteerController {
     async pdf(@Body() data: any) {
         return this.puppeteerService.pdf(data);
     }
+
+    @Post('/getData')
+    async getData(@Body() data: any) {
+        return this.puppeteerService.getData(data);
+    }
 }
