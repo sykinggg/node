@@ -188,14 +188,117 @@ export class PuppeteerService {
     }
 
     // mzitu
-    private mzituUrl = 'https://www.mzitu.com/';
-    async setMzituUrlGetDetails(data?: any): Promise<any> {
+    // 获取大分类
+    private mzituUrl = 'https://www.walltu.com';
+    async setMzituUrlList(data?: any): Promise<any> {
         const browser = await (puppeteer.launch({ headless: true }));
         const page = await browser.newPage();
-        await page.goto(this.mzituUrl);
+        await page.goto(this.mzituUrl + '/mn/');
         await page.waitFor(1000);
-        const resource = await page._client.send('Page.getResourceTree');
-        console.log(resource);
-        return resource;
+
+        const result = await page.evaluate((arg) => {
+            const elements = document.querySelectorAll('#q a'), returnData = [];
+            for (const element of elements) {
+                returnData.push({
+                    name: (element as HTMLElement).innerText,
+                    href: element.getAttribute('href'),
+                });
+            }
+
+            return { returnData }; // 返回数据
+        }, data, this);
+
+        const awaitResult = await result;
+
+        this.pupCommonService.setData('setMzituUrlList', awaitResult);
+
+        return result;
+    }
+    // 获取分类的分页规则
+    private setMzituUrlGetDetailsIdx = 0;
+    async setMzituUrlGetDetails(data?: any): Promise<any> {
+        // tslint:disable-next-line:prefer-const
+        let page, list, pageArr = [];
+        if (data) {
+            if (data.page) {
+                page = data.page;
+            } else {
+                const browser = await (puppeteer.launch({ headless: true }));
+                page = await browser.newPage();
+            }
+            if (data.list) {
+                list = data.list;
+            } else {
+                list = await this.pupCommonService.getData('setMzituUrlList');
+            }
+        } else {
+            const browser = await (puppeteer.launch({ headless: true }));
+            page = await browser.newPage();
+            list = await this.pupCommonService.getData('setMzituUrlList');
+        }
+        await page.goto(this.mzituUrl + list[0].returnData[this.setMzituUrlGetDetailsIdx].href);
+        await page.waitFor(1000);
+        // const resource = await page._client.send('Page.getResourceTree');
+        const result = await page.evaluate((arg) => {
+            let pageElement, prefix, suffix, reg, num;
+            pageElement = document.querySelectorAll('#pg a');
+            prefix = 'index_';
+            suffix = '.html';
+            reg = /['index_', '.html']/g;
+            num = pageElement[pageElement.length - 1].getAttribute('href').replace(reg, '');
+            return { prefix, suffix, num, text: pageElement[pageElement.length - 1].getAttribute('href') };
+        }, this);
+
+        const awaitResult = await result;
+
+        for (let i = 1; i < awaitResult.num; i++) {
+            if (i !== 1) {
+                pageArr.push(awaitResult.prefix + i + awaitResult.suffix);
+            } else {
+                pageArr.push('');
+            }
+        }
+
+        console.log(`${list[0].returnData[this.setMzituUrlGetDetailsIdx].name || '无名'}获取${pageArr.length}页`);
+        this.pupCommonService.setData(list[0].returnData[this.setMzituUrlGetDetailsIdx].href, pageArr);
+        this.setMzituUrlGetDetailsIdx++;
+        if (this.setMzituUrlGetDetailsIdx < list[0].returnData.length - 1) {
+            this.setMzituUrlGetDetails({ page, list });
+        } else {
+            console.log('完成');
+        }
+
+        return pageArr;
+    }
+
+    // 获取详情
+    private getMzituUrlGetDetailsIdx = 0;
+    async getMzituUrlGetDetails(data?: any): Promise<any> {
+        let page, list;
+        if (data) {
+            if (data.page) {
+                page = data.page;
+            } else {
+                const browser = await (puppeteer.launch({ headless: false }));
+                page = await browser.newPage();
+            }
+            if (data.list) {
+                list = data.list;
+            } else {
+                list = await this.pupCommonService.getData('setMzituUrlList');
+            }
+        } else {
+            const browser = await (puppeteer.launch({ headless: false }));
+            page = await browser.newPage();
+            list = await this.pupCommonService.getData('setMzituUrlList');
+        }
+
+        const listPage = await this.pupCommonService.getData(list[0].returnData[0].href);
+        console.log(list[0].returnData[0].href + listPage[0]);
+
+        await page.goto(list[0].returnData[0].href + listPage[0]);
+        await page.waitFor(1000);
+
+        return null;
     }
 }

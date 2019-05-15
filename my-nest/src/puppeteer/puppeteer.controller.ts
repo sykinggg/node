@@ -42,8 +42,18 @@ export class PuppeteerController {
         return this.puppeteerService.setGirl13GetDetails(data);
     }
 
+    @Post('/setMzituUrlList')
+    async setMzituUrlList(@Body() data: any) {
+        return this.puppeteerService.setMzituUrlList(data);
+    }
+
     @Post('/setMzituUrlGetDetails')
     async setMzituUrlGetDetails(@Body() data: any) {
         return this.puppeteerService.setMzituUrlGetDetails(data);
+    }
+
+    @Post('/getMzituUrlGetDetails')
+    async getMzituUrlGetDetails(@Body() data: any) {
+        return this.puppeteerService.getMzituUrlGetDetails(data);
     }
 }
