@@ -114,7 +114,7 @@ export class PupCommonService {
     private getGirl13ListIdx = 1;
     private getGirl13ListData = [];
     async getGirl13List(page, url, num): Promise<any> {
-        await page.goto(url + this.getGirl13ListIdx, {waitUntil: 'load', timeout: 0});
+        await page.goto(url + this.getGirl13ListIdx, { waitUntil: 'load', timeout: 0 });
         await page.waitFor(1000);
         // console.log(`第${this.getGirl13ListIdx}页开始`);
         // const result = await page.evaluate((arg) => {
@@ -177,7 +177,10 @@ export class PupCommonService {
     public getData(type): void {
         const oldModal = this.pupPicModel.find({ name: type }).exec();
         return oldModal.then(res => {
-            return res[0].address;
+            if (res && Array.isArray(res) && res[0] && res[0].address) {
+                return res[0].address;
+            }
+            return null;
         });
     }
 

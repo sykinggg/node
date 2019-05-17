@@ -236,31 +236,39 @@ export class PuppeteerService {
             page = await browser.newPage();
             list = await this.pupCommonService.getData('setMzituUrlList');
         }
-        await page.goto(this.mzituUrl + list[0].returnData[this.setMzituUrlGetDetailsIdx].href);
-        await page.waitFor(1000);
-        // const resource = await page._client.send('Page.getResourceTree');
-        const result = await page.evaluate((arg) => {
-            let pageElement, prefix, suffix, reg, num;
-            pageElement = document.querySelectorAll('#pg a');
-            prefix = 'index_';
-            suffix = '.html';
-            reg = /['index_', '.html']/g;
-            num = pageElement[pageElement.length - 1].getAttribute('href').replace(reg, '');
-            return { prefix, suffix, num, text: pageElement[pageElement.length - 1].getAttribute('href') };
-        }, this);
 
-        const awaitResult = await result;
+        const dbData: any = await this.pupCommonService.getData(list[0].returnData[this.setMzituUrlGetDetailsIdx].href);
 
-        for (let i = 1; i < awaitResult.num; i++) {
-            if (i !== 1) {
-                pageArr.push(awaitResult.prefix + i + awaitResult.suffix);
-            } else {
-                pageArr.push('');
+        if (dbData && dbData.length) {
+            console.log(`${list[0].returnData[this.setMzituUrlGetDetailsIdx].name || '无名'}已获取`);
+        } else {
+            await page.goto(this.mzituUrl + list[0].returnData[this.setMzituUrlGetDetailsIdx].href);
+            await page.waitFor(1000);
+            // const resource = await page._client.send('Page.getResourceTree');
+            const result = await page.evaluate((arg) => {
+                let pageElement, prefix, suffix, reg, num;
+                pageElement = document.querySelectorAll('#pg a');
+                prefix = 'index_';
+                suffix = '.html';
+                reg = /['index_', '.html']/g;
+                num = pageElement[pageElement.length - 1].getAttribute('href').replace(reg, '');
+                return { prefix, suffix, num, text: pageElement[pageElement.length - 1].getAttribute('href') };
+            }, this);
+
+            const awaitResult = await result;
+
+            for (let i = 1; i < awaitResult.num; i++) {
+                if (i !== 1) {
+                    pageArr.push(awaitResult.prefix + i + awaitResult.suffix);
+                } else {
+                    pageArr.push('');
+                }
             }
+
+            console.log(`${list[0].returnData[this.setMzituUrlGetDetailsIdx].name || '无名'}获取${pageArr.length}页`);
+            this.pupCommonService.setData(list[0].returnData[this.setMzituUrlGetDetailsIdx].href, pageArr);
         }
 
-        console.log(`${list[0].returnData[this.setMzituUrlGetDetailsIdx].name || '无名'}获取${pageArr.length}页`);
-        this.pupCommonService.setData(list[0].returnData[this.setMzituUrlGetDetailsIdx].href, pageArr);
         this.setMzituUrlGetDetailsIdx++;
         if (this.setMzituUrlGetDetailsIdx < list[0].returnData.length - 1) {
             this.setMzituUrlGetDetails({ page, list });
@@ -271,15 +279,15 @@ export class PuppeteerService {
         return pageArr;
     }
 
-    // 获取详情
-    private getMzituUrlGetDetailsIdx = 0;
-    async getMzituUrlGetDetails(data?: any): Promise<any> {
+    // 爬取页面详情
+    private setMzituUrlGetListIdx = 0;
+    async setMzituUrlGetPageDetails(data?: any): Promise<any> {
         let page, list;
         if (data) {
             if (data.page) {
                 page = data.page;
             } else {
-                const browser = await (puppeteer.launch({ headless: false }));
+                const browser = await (puppeteer.launch({ headless: true }));
                 page = await browser.newPage();
             }
             if (data.list) {
@@ -288,17 +296,75 @@ export class PuppeteerService {
                 list = await this.pupCommonService.getData('setMzituUrlList');
             }
         } else {
-            const browser = await (puppeteer.launch({ headless: false }));
+            const browser = await (puppeteer.launch({ headless: true }));
             page = await browser.newPage();
             list = await this.pupCommonService.getData('setMzituUrlList');
         }
 
-        const listPage = await this.pupCommonService.getData(list[0].returnData[0].href);
-        console.log(list[0].returnData[0].href + listPage[0]);
+        const listPage: any = await this.pupCommonService.getData(list[0].returnData[this.setMzituUrlGetListIdx].href);
+        let awaitResultArr = [];
+        console.log(`${list[0].returnData[this.setMzituUrlGetListIdx].name}分类开始`);
 
-        await page.goto(list[0].returnData[0].href + listPage[0]);
-        await page.waitFor(1000);
+        const dbData: any = await this.pupCommonService.getData(this.mzituUrl + list[0].returnData[this.setMzituUrlGetListIdx].href);
 
-        return null;
+        if (dbData && dbData.length) {
+            console.log(`${list[0].returnData[this.setMzituUrlGetListIdx].name}分类已在数据库中结束`);
+        } else {
+            if (listPage && Array.isArray(listPage)) {
+                for (const pageItem of listPage) {
+                    // console.log(this.mzituUrl + list[0].returnData[this.setMzituUrlGetListIdx].href + pageItem);
+                    // console.log(listPage);
+
+                    await page.goto(this.mzituUrl + list[0].returnData[this.setMzituUrlGetListIdx].href + pageItem);
+                    await page.waitFor(1000);
+
+                    const result = await page.evaluate((arg) => {
+                        let pageElement, resultData;
+                        resultData = [];
+                        pageElement = document.querySelectorAll('#l > a');
+                        for (const pageI of pageElement) {
+                            resultData.push({
+                                href: pageI.getAttribute('href'),
+                                src: pageI.querySelector('img').getAttribute('src'),
+                            });
+                        }
+                        return { resultData };
+                    }, this);
+
+                    const awaitResult: any = await result;
+
+                    awaitResultArr = awaitResultArr.concat(awaitResult.resultData);
+                    console.log(`${pageItem || 'index_1.html'}完成`);
+                }
+
+                this.pupCommonService.setData(this.mzituUrl + list[0].returnData[this.setMzituUrlGetListIdx].href, awaitResultArr);
+                console.log(`${list[0].returnData[this.setMzituUrlGetListIdx].name}分类结束`);
+            }
+        }
+
+        this.setMzituUrlGetListIdx++;
+        if (this.setMzituUrlGetListIdx < list[0].returnData.length) {
+            this.setMzituUrlGetPageDetails({ page, list });
+        }
+        return { dbData };
+    }
+
+    // 获取页面详情
+    async getMzituUrlGetPageDetails(data?: any): Promise<any> {
+        const list = await this.pupCommonService.getData('setMzituUrlList');
+        const returnData = [];
+
+        if (list[0].returnData && Array.isArray(list[0].returnData)) {
+            for (const item of list[0].returnData) {
+                const result = await this.pupCommonService.getData(this.mzituUrl + item.href);
+
+                returnData.push({
+                    name: item.name,
+                    pic: result,
+                });
+            }
+        }
+
+        return returnData;
     }
 }
