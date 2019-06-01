@@ -14,6 +14,7 @@ import { MapModule } from './map/map.module';
 import { MusicModule } from './music/music.module';
 import { EconomicModule } from './economic/economic.module';
 import { PuppeteerModule } from './puppeteer/puppeteer.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { PuppeteerModule } from './puppeteer/puppeteer.module';
         MusicModule,
         EconomicModule,
         PuppeteerModule,
+        AiModule,
     ],
     controllers: [AppController],
     providers: [AppService],
