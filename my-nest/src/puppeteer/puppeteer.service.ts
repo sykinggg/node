@@ -22,7 +22,7 @@ export class PuppeteerService {
         await page.waitFor(data.waitFor || 1000);
         await this.pupCommonService.autoScroll(page);
         const result = await page.screenshot({
-            path: '1.png',
+            path: './dist/1.png',
             fullPage: true,
         });
         await browser.close();
@@ -39,7 +39,7 @@ export class PuppeteerService {
         await page.waitFor(data.waitFor || 1000);
         await page.emulateMedia('screen');
         const result = await page.pdf({
-            path: './1.pdf',
+            path: './dist/1.pdf',
         });
         await browser.close();
         return result;
