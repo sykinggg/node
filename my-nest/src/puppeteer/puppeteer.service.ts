@@ -182,8 +182,27 @@ export class PuppeteerService {
         return ListData;
     }
 
-    async getGirl13GetDetails(data?: any): Promise<any> {
-        const ListData = await this.pupCommonService.getData('getGirl13GetDetails');
+    public getGirl13GetDetailsData: Array<any>;
+    async getGirl13GetDetails(params?: any): Promise<any> {
+        this.getGirl13GetDetailsData = await this.pupCommonService.getData('getGirl13GetDetails');
+        let ListData = {}, index = 1, total = 0, data = [], size: any = 10;
+        index = params && params.index || 1;
+        size = params && params.size || 10;
+        if (size === 'all') {
+            ListData = {
+                index: 1,
+                total: 1,
+                data: this.getGirl13GetDetailsData,
+            };
+        } else {
+            total = (this.getGirl13GetDetailsData.length / size);
+            data = this.getGirl13GetDetailsData.slice((index - 1) * size, index * size);
+            ListData = {
+                index,
+                total,
+                data,
+            };
+        }
         return ListData;
     }
 

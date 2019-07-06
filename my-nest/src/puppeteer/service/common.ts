@@ -174,7 +174,7 @@ export class PupCommonService {
     }
 
     // 获取数据
-    public getData(type): void {
+    public getData(type): any {
         const oldModal = this.pupPicModel.find({ name: type }).exec();
         return oldModal.then(res => {
             if (res && Array.isArray(res) && res[0] && res[0].address) {

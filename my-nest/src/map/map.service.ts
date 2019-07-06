@@ -624,7 +624,7 @@ export class MapService {
         const param = {
             key: this.mapApiKey,
         };
-        return this.httpService.post(url, pointArr, {headers: param}).pipe(map((res: any) => {
+        return this.httpService.post(url, pointArr, { headers: param }).pipe(map((res: any) => {
             return res.data;
         }));
     }

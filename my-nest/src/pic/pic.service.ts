@@ -27,32 +27,32 @@ export class PicService {
             length: 12,
         },
         'movie_sf': {
-            head: 'http://www.xfyy406.com/shaofu/index',
+            head: 'http://www.xfyy708.com/shaofu/index',
             foot: '.html',
             length: 296,
         },
         'movie_tx': {
-            head: 'http://www.xfyy406.com/texie/index',
+            head: 'http://www.xfyy708.com/texie/index',
             foot: '.html',
             length: 106,
         },
         'movie_qj': {
-            head: 'http://www.xfyy406.com/qunjiao/index',
+            head: 'http://www.xfyy708.com/qunjiao/index',
             foot: '.html',
             length: 177,
         },
         'movie_yz': {
-            head: 'http://www.xfyy406.com/yazhou/index',
+            head: 'http://www.xfyy708.com/yazhou/index',
             foot: '.html',
             length: 2109,
         },
         'movie_ll': {
-            head: 'http://www.xfyy406.com/luanlun/index',
+            head: 'http://www.xfyy708.com/luanlun/index',
             foot: '.html',
             length: 525,
         },
         'movie_zw': {
-            head: 'http://www.xfyy406.com/zhongwen/index',
+            head: 'http://www.xfyy708.com/zhongwen/index',
             foot: '.html',
             length: 952,
         },
@@ -163,7 +163,7 @@ export class PicService {
                 $(elem).find('p').each((pi, pelem) => {
                     const name = unescape($(pelem).html().replace(/&#x/g, '%u').replace(/;/g, ''));
                     const imgUrl = $(pelem).parent('a').find('img').attr('src');
-                    const detaHref = 'http://www.xfyy406.com' + $(pelem).parent('a').attr('href');
+                    const detaHref = 'http://www.xfyy708.com' + $(pelem).parent('a').attr('href');
                     this.imgsrc.push({ name, imgUrl, detaHref });
                 });
             });
