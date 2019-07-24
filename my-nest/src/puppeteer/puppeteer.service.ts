@@ -12,7 +12,13 @@ export class PuppeteerService {
         private pupCommonService: PupCommonService,
     ) { }
 
-    // 转换为图片
+    /**
+     *
+     * 转换为图片
+     * @param {*} data
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async pic(data: any): Promise<any> {
         const browser = await (puppeteer.launch({ headless: true }));
         const page = await browser.newPage();
@@ -29,7 +35,13 @@ export class PuppeteerService {
         return result;
     }
 
-    // 转换为pdf
+    /**
+     *
+     * 转换为pdf
+     * @param {*} data
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async pdf(data: any): Promise<any> {
         const browser = await (puppeteer.launch({ headless: true }));
         const page = await browser.newPage();
@@ -45,7 +57,13 @@ export class PuppeteerService {
         return result;
     }
 
-    // 获取特定数据
+    /**
+     *
+     * 获取特定数据
+     * @param {*} data
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async getData(data: any): Promise<any> {
         const browser = await (puppeteer.launch({ headless: true }));
         const page = await browser.newPage();
@@ -72,7 +90,12 @@ export class PuppeteerService {
         return result;
     }
 
-    // mm131获取基础分类
+    /**
+     *
+     * mm131获取基础分类
+     * @private
+     * @memberof PuppeteerService
+     */
     private mm131Url = 'http://www.mm131.com/';
     async getMm131BasicClass(data?: any): Promise<any> {
         if (!data) {
@@ -107,7 +130,13 @@ export class PuppeteerService {
         return setData;
     }
 
-    // mm131获取详情
+    /**
+     *
+     * mm131获取详情
+     * @param {*} [data]
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async getMm131GetDetails(data?: any): Promise<any> {
 
         const browser = await (puppeteer.launch({ headless: true }));
@@ -153,7 +182,12 @@ export class PuppeteerService {
         return rdData;
     }
 
-    // girl13
+    /**
+     *
+     * girl13
+     * @private
+     * @memberof PuppeteerService
+     */
     private girl13Url = 'http://www.girl13.com/page/';
     private index;
     async setGirl13GetDetails(data?: any): Promise<any> {
@@ -182,7 +216,21 @@ export class PuppeteerService {
         return ListData;
     }
 
+    /**
+     *
+     * 存放获取数据
+     * @type {Array<any>}
+     * @memberof PuppeteerService
+     */
     public getGirl13GetDetailsData: Array<any>;
+
+    /**
+     *
+     * 获取 Girl13 页面 详情
+     * @param {*} [params]
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async getGirl13GetDetails(params?: any): Promise<any> {
         this.getGirl13GetDetailsData = await this.pupCommonService.getData('getGirl13GetDetails');
         let ListData = {}, index = 1, total = 0, data = [], size: any = 10;
@@ -206,9 +254,21 @@ export class PuppeteerService {
         return ListData;
     }
 
-    // mzitu
-    // 获取大分类
+    /**
+     *
+     * mzitu 获取大分类
+     * @private
+     * @memberof PuppeteerService
+     */
     private mzituUrl = 'https://www.walltu.com';
+
+    /**
+     *
+     * 获取 mzitu 数据
+     * @param {*} [data]
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async setMzituUrlList(data?: any): Promise<any> {
         const browser = await (puppeteer.launch({ headless: true }));
         const page = await browser.newPage();
@@ -234,7 +294,22 @@ export class PuppeteerService {
         return result;
     }
     // 获取分类的分页规则
+
+    /**
+     *
+     * 获取分类的分页 具体页数
+     * @private
+     * @memberof PuppeteerService
+     */
     private setMzituUrlGetDetailsIdx = 0;
+
+    /**
+     *
+     * 获取 Mzitu 数据
+     * @param {*} [data]
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async setMzituUrlGetDetails(data?: any): Promise<any> {
         // tslint:disable-next-line:prefer-const
         let page, list, pageArr = [];
@@ -298,8 +373,21 @@ export class PuppeteerService {
         return pageArr;
     }
 
-    // 爬取页面详情
+    /**
+     *
+     * 页面数据
+     * @private
+     * @memberof PuppeteerService
+     */
     private setMzituUrlGetListIdx = 0;
+
+    /**
+     *
+     * 爬取页面详情
+     * @param {*} [data]
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async setMzituUrlGetPageDetails(data?: any): Promise<any> {
         let page, list;
         if (data) {
@@ -368,7 +456,13 @@ export class PuppeteerService {
         return { dbData };
     }
 
-    // 获取页面详情
+    /**
+     *
+     * 获取页面详情
+     * @param {*} [data]
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async getMzituUrlGetPageDetails(data?: any): Promise<any> {
         const list = await this.pupCommonService.getData('setMzituUrlList');
         const returnData = [];
