@@ -1,5 +1,27 @@
 import { Injectable, HttpService } from '@nestjs/common';
 import { map } from 'rxjs/internal/operators/map';
+// tslint:disable-next-line:max-line-length
+import { IreverseGeocoding } from './interface/reverseGeocoding.interface';
+import { IreverseRegeocoding } from './interface/reverseRegeocoding.interface';
+import { IdirectionWalking } from './interface/directionWalking.interface';
+import { IdirectionTransitIntegrated } from './interface/directionTransitIntegrated.interface';
+import { IdirectionDriving } from './interface/directionDriving.interface';
+import { IdirectionBicycling } from './interface/directionBicycling.interface';
+import { IdirectionTruck } from './interface/directionTruck.interface';
+import { Idistance } from './interface/distance.interface';
+import { IconfigDistrict } from './interface/configDistrict.interface';
+import { IplaceText } from './interface/placeText.interface';
+import { IplaceAround } from './interface/placeAround.interface';
+import { IplacePolygon } from './interface/placePolygon.interface';
+import { IplaceDetail } from './interface/placeDetail.interface';
+import { Iv3Ip } from './interface/v3Ip.interface';
+import { Iv3Staticmap } from './interface/v3Staticmap.interface';
+import { IcoordinateConvert } from './interface/coordinateConvert.interface';
+import { IweatherWeatherInfo } from './interface/weatherWeatherInfo.interface';
+import { IassistantInputtips } from './interface/assistantInputtips.interface';
+import { IstatusRectangle } from './interface/statusRectangle.interface';
+import { IstatusCircle } from './interface/statusCircle.interface';
+import { IstatusRoad } from './interface/statusRoad.interface';
 
 @Injectable()
 export class MapService {
@@ -12,17 +34,27 @@ export class MapService {
     /**
      * 地理编码
      */
+    /**
+     *
+     * 高德地图 地理编码 api 地址
+     * @private
+     * @memberof MapService
+     */
     private reverseGeocodingUrl = 'https://restapi.amap.com/v3/geocode/geo';
-    async reverseGeocoding(body) {
+
+    /**
+     *
+     * 高德 地理编码
+     * @param {IreverseGeocoding} body
+     * @returns
+     * @memberof MapService
+     */
+    async reverseGeocoding(body: IreverseGeocoding) {
         let url = this.reverseGeocodingUrl;
         url += '?key=' + this.mapApiKey;
-        // 结构化地址信息
         url += '&address=' + (body.address || '北京市朝阳区阜通东大街6号');
-        // 指定查询的城市
         url += '&city=' + (body.city || '');
-        // 批量查询控制
         url += '&batch=' + (body.batch || false);
-        // 返回数据格式类型
         url += '&output=' + (body.output || 'JSON');
         url = encodeURI(url);
         return this.httpService.get(url).pipe(map((resp: any) => {
@@ -31,27 +63,30 @@ export class MapService {
     }
 
     /**
-     * 逆地理编码
+     *
+     * 高德 逆地理编码 api 地址
+     * @private
+     * @memberof MapService
      */
     private reverseRegeocodingUrl = 'https://restapi.amap.com/v3/geocode/regeo';
-    async reverseRegeocoding(body) {
+
+    /**
+     *
+     * 高德 逆地理编码
+     * @param {IreverseRegeocoding} body
+     * @returns
+     * @memberof MapService
+     */
+    async reverseRegeocoding(body: IreverseRegeocoding) {
         let url = this.reverseRegeocodingUrl;
         url += '?key=' + this.mapApiKey;
-        // 经纬度坐标
         url += '&location=' + (body.location || '116.310003,39.991957');
-        // 返回附近POI类型
         url += '&poitype=' + body.poitype;
-        // 搜索半径
         url += '&radius=' + (body.radius || '1000');
-        // 返回结果控制
         url += '&extensions=' + (body.extensions || 'all');
-        // 批量查询控制
         url += '&batch=' + body.batch;
-        // 道路等级
         url += '&roadlevel=' + body.roadlevel;
-        // 返回数据格式类型
         url += '&output=' + (body.output || 'JSON');
-        // 是否优化POI返回顺序
         url += '&homeorcorp=' + (body.homeorcorp || 0);
         url = encodeURI(url);
 
@@ -61,17 +96,25 @@ export class MapService {
     }
 
     /**
-     * 步行路径规划
+     *
+     * 步行路径规划 api 地址
+     * @private
+     * @memberof MapService
      */
     private directionWalkingUrl = 'https://restapi.amap.com/v3/direction/walking';
-    async directionWalking(body) {
+
+    /**
+     *
+     * 步行路径规划
+     * @param {IdirectionWalking} body
+     * @returns
+     * @memberof MapService
+     */
+    async directionWalking(body: IdirectionWalking) {
         let url = this.directionWalkingUrl;
         url += '?key=' + this.mapApiKey;
-        // 出发点
         url += '&origin=' + (body.origin || '116.434307,39.90909');
-        // 目的地
         url += '&destination=' + (body.destination || '116.434446,39.90816');
-        // 返回数据格式类型
         url += '&output=' + (body.output || 'JSON');
         url = encodeURI(url);
 
@@ -81,31 +124,32 @@ export class MapService {
     }
 
     /**
-     * 公交路径规划
+     *
+     * 高德 公交路径规划 api 地址
+     * @private
+     * @memberof MapService
      */
     private directionTransitIntegratedUrl = 'https://restapi.amap.com/v3/direction/transit/integrated';
-    async directionTransitIntegrated(body) {
+
+    /**
+     *
+     * 高德 公交路径规划
+     * @param {IdirectionTransitIntegrated} body
+     * @returns
+     * @memberof MapService
+     */
+    async directionTransitIntegrated(body: IdirectionTransitIntegrated) {
         let url = this.directionTransitIntegratedUrl;
         url += '?key=' + this.mapApiKey;
-        // 出发点
         url += '&origin=' + (body.origin || '116.481028,39.989643');
-        // 目的地
         url += '&destination=' + (body.destination || '116.434446,39.90816');
-        // 城市/跨城规划时的起点城市
         url += '&city=' + (body.city || '北京');
-        // 跨城公交规划时的终点城市
         url += '&cityd=' + (body.cityd || '北京');
-        // 返回结果详略
         url += '&extensions=' + body.extensions;
-        // 公交换乘策略
         url += '&strategy=' + (body.strategy || 0);
-        // 是否计算夜班车
         url += '&nightflag=' + (body.nightflag || 0);
-        // 出发日期
         url += '&date=' + (body.date || '2014-3-19');
-        // 出发时间
         url += '&time=' + (body.time || '22:34');
-        // 返回数据格式类型
         url += '&output=' + (body.output || 'JSON');
         url = encodeURI(url);
 
@@ -115,10 +159,21 @@ export class MapService {
     }
 
     /**
-     * 驾车路径规划
+     *
+     * 高德 驾车路径规划 api 地址
+     * @private
+     * @memberof MapService
      */
     private directionDrivingUrl = 'https://restapi.amap.com/v3/direction/driving';
-    async directionDriving(body) {
+
+    /**
+     *
+     * 高德 驾车路径规划
+     * @param {IdirectionDriving} body
+     * @returns
+     * @memberof MapService
+     */
+    async directionDriving(body: IdirectionDriving) {
         let url = this.directionDrivingUrl;
         url += '?key=' + this.mapApiKey;
         // 出发点
@@ -161,10 +216,21 @@ export class MapService {
     }
 
     /**
-     * 骑行路径规划
+     *
+     * 高德 骑行路径规划 api地址
+     * @private
+     * @memberof MapService
      */
     private directionBicyclingUrl = 'https://restapi.amap.com/v4/direction/bicycling';
-    async directionBicycling(body) {
+
+    /**
+     *
+     * 高德 骑行路径规划
+     * @param {IdirectionBicycling} body
+     * @returns
+     * @memberof MapService
+     */
+    async directionBicycling(body: IdirectionBicycling) {
         let url = this.directionBicyclingUrl;
         url += '?key=' + this.mapApiKey;
         // 出发点经纬度
@@ -179,10 +245,21 @@ export class MapService {
     }
 
     /**
-     * 货车路径规划
+     *
+     * 高德 货车路径规划 api 地址
+     * @private
+     * @memberof MapService
      */
     private directionTruckUrl = 'https://restapi.amap.com/v4/direction/truck';
-    async directionTruck(body) {
+
+    /**
+     *
+     * 高德 货车路径规划
+     * @param {IdirectionTruck} body
+     * @returns
+     * @memberof MapService
+     */
+    async directionTruck(body: IdirectionTruck) {
         let url = this.directionTruckUrl;
         url += '?key=' + this.mapApiKey;
         // 出发点经纬度
@@ -233,10 +310,21 @@ export class MapService {
     }
 
     /**
-     * 距离测量
+     *
+     * 高德 距离测量 api 地址
+     * @private
+     * @memberof MapService
      */
     private distanceUrl = 'https://restapi.amap.com/v3/distance';
-    async distance(body) {
+
+    /**
+     *
+     * 高德 距离测量
+     * @param {Idistance} body
+     * @returns
+     * @memberof MapService
+     */
+    async distance(body: Idistance) {
         let url = this.distanceUrl;
         url += '?key=' + this.mapApiKey;
         // 出发点
@@ -253,10 +341,21 @@ export class MapService {
     }
 
     /**
-     * 行政区域查询
+     *
+     * 高德 行政区域查询 api 地址
+     * @private
+     * @memberof MapService
      */
     private configDistrictUrl = 'https://restapi.amap.com/v3/config/district';
-    async configDistrict(body) {
+
+    /**
+     *
+     * 高德 行政区域查询
+     * @param {IconfigDistrict} body
+     * @returns
+     * @memberof MapService
+     */
+    async configDistrict(body: IconfigDistrict) {
         let url = this.configDistrictUrl;
         url += '?key=' + this.mapApiKey;
         // 查询关键字
@@ -281,10 +380,21 @@ export class MapService {
     }
 
     /**
-     * 关键字搜索
+     *
+     * 高德 关键字搜索 api 地址
+     * @private
+     * @memberof MapService
      */
     private placeTextUrl = 'https://restapi.amap.com/v3/place/text';
-    async placeText(body) {
+
+    /**
+     *
+     * 高德 关键字搜索
+     * @param {IplaceText} body
+     * @returns
+     * @memberof MapService
+     */
+    async placeText(body: IplaceText) {
         let url = this.placeTextUrl;
         url += '?key=' + this.mapApiKey;
         // 查询关键字
@@ -301,10 +411,6 @@ export class MapService {
         url += '&offset=' + (body.offset || 20);
         // 当前页数
         url += '&page=' + (body.page || 1);
-        // 建筑物的POI编号
-        url += '&building=' + body.building;
-        // 搜索楼层
-        url += '&floor=' + body.floor;
         // 返回结果控制
         url += '&extensions=' + (body.extensions || 'all');
         // 返回数据格式类型
@@ -317,10 +423,21 @@ export class MapService {
     }
 
     /**
-     * 周边搜索
+     *
+     * 高德 周边搜索 api 地址
+     * @private
+     * @memberof MapService
      */
     private placeAroundUrl = 'https://restapi.amap.com/v3/place/around';
-    async placeAround(body) {
+
+    /**
+     *
+     * 高德 周边搜索
+     * @param {IplaceAround} body
+     * @returns
+     * @memberof MapService
+     */
+    async placeAround(body: IplaceAround) {
         let url = this.placeAroundUrl;
         url += '?key=' + this.mapApiKey;
         // 中心点坐标
@@ -351,10 +468,21 @@ export class MapService {
     }
 
     /**
-     * 多边形搜索
+     *
+     * 高德 多边形搜索 api 地址
+     * @private
+     * @memberof MapService
      */
     private placePolygonUrl = 'https://restapi.amap.com/v3/place/polygon';
-    async placePolygon(body) {
+
+    /**
+     *
+     * 高德 多边形搜索
+     * @param {IplacePolygon} body
+     * @returns
+     * @memberof MapService
+     */
+    async placePolygon(body: IplacePolygon) {
         let url = this.placePolygonUrl;
         let defaultPolygon = '116.460988,40.006919|116.48231,40.007381;116.47516,39.99713';
         defaultPolygon += '|116.472596,39.985227|116.45669,39.984989|116.460988,40.006919';
@@ -380,10 +508,21 @@ export class MapService {
     }
 
     /**
-     * ID查询
+     *
+     * 高德 ID查询 api 地址
+     * @private
+     * @memberof MapService
      */
     private placeDetailUrl = 'https://restapi.amap.com/v3/place/detail';
-    async placeDetail(body) {
+
+    /**
+     *
+     * 高德 ID查询
+     * @param {IplaceDetail} body
+     * @returns
+     * @memberof MapService
+     */
+    async placeDetail(body: IplaceDetail) {
         let url = this.placeDetailUrl;
         url += '?key=' + this.mapApiKey;
         // 兴趣点ID
@@ -398,10 +537,21 @@ export class MapService {
     }
 
     /**
-     * IP定位
+     *
+     * 高德 IP定位 api 地址
+     * @private
+     * @memberof MapService
      */
     private v3IpUrl = 'https://restapi.amap.com/v3/ip';
-    async v3Ip(body) {
+
+    /**
+     *
+     * 高德 IP定位
+     * @param {Iv3Ip} body
+     * @returns
+     * @memberof MapService
+     */
+    async v3Ip(body: Iv3Ip) {
         let url = this.v3IpUrl;
         url += '?key=' + this.mapApiKey;
         // ip地址
@@ -416,10 +566,21 @@ export class MapService {
     }
 
     /**
-     * 静态地图
+     *
+     * 高德 静态地图 api 地址
+     * @private
+     * @memberof MapService
      */
     private v3StaticmapUrl = 'https://restapi.amap.com/v3/staticmap';
-    public v3Staticmap(body) {
+
+    /**
+     *
+     * 高德 静态地图
+     * @param {Iv3Staticmap} body
+     * @returns
+     * @memberof MapService
+     */
+    public v3Staticmap(body: Iv3Staticmap) {
         let url = this.v3StaticmapUrl;
         url += '?key=' + this.mapApiKey;
         // 地图中心点
@@ -447,10 +608,21 @@ export class MapService {
     }
 
     /**
-     * 坐标转换
+     *
+     * 高德 坐标转换 api 地址
+     * @private
+     * @memberof MapService
      */
     private coordinateConvertUrl = 'https://restapi.amap.com/v3/assistant/coordinate/convert';
-    async coordinateConvert(body) {
+
+    /**
+     *
+     * 高德 坐标转换
+     * @param {IcoordinateConvert} body
+     * @returns
+     * @memberof MapService
+     */
+    async coordinateConvert(body: IcoordinateConvert) {
         let url = this.coordinateConvertUrl;
         url += '?key=' + this.mapApiKey;
         // 坐标点
@@ -467,10 +639,21 @@ export class MapService {
     }
 
     /**
-     * 天气查询
+     *
+     * 高德 天气查询 api 地址
+     * @private
+     * @memberof MapService
      */
     private weatherWeatherInfoUrl = 'https://restapi.amap.com/v3/weather/weatherInfo';
-    async weatherWeatherInfo(body) {
+
+    /**
+     *
+     * 高德 天气查询
+     * @param {IweatherWeatherInfo} body
+     * @returns
+     * @memberof MapService
+     */
+    async weatherWeatherInfo(body: IweatherWeatherInfo) {
         let url = this.weatherWeatherInfoUrl;
         url += '?key=' + this.mapApiKey;
         // 城市编码
@@ -486,10 +669,21 @@ export class MapService {
     }
 
     /**
-     * 输入提示
+     *
+     * 高德 输入提示 api 地址
+     * @private
+     * @memberof MapService
      */
     private assistantInputtipsUrl = 'https://restapi.amap.com/v3/assistant/inputtips';
-    async assistantInputtips(body) {
+
+    /**
+     *
+     * 高德 输入提示
+     * @param {IassistantInputtips} body
+     * @returns
+     * @memberof MapService
+     */
+    async assistantInputtips(body: IassistantInputtips) {
         let url = this.assistantInputtipsUrl;
         url += '?key=' + this.mapApiKey;
         // 查询关键词
@@ -519,13 +713,34 @@ export class MapService {
     // 支持交通态势的城市列表
     // tslint:disable-next-line:max-line-length
     private statusRectangleList = '北京，上海，广州，深圳，宁波，武汉，重庆，成都，沈阳，南京，杭州，长春，常州，大连，东莞，福州，青岛，石家庄，天津，太原，西安，无锡，厦门，珠海，长沙，苏州，金华，佛山，济南，泉州，嘉兴，西宁，惠州，温州，中山，合肥，乌鲁木齐，台州，绍兴，昆明';
+
+    /**
+     *
+     * 返回 高德 支持交通态势的城市列表
+     * @returns
+     * @memberof MapService
+     */
     getStatusRectangleList() {
         const list = this.statusRectangleList.split(',');
         return list;
     }
-    // 矩形区域交通态势
+
+    /**
+     *
+     * 高德 矩形区域交通态势 api 地址
+     * @private
+     * @memberof MapService
+     */
     private statusRectangleUrl = 'https://restapi.amap.com/v3/traffic/status/rectangle';
-    async statusRectangle(body) {
+
+    /**
+     *
+     * 高德 矩形区域交通态势
+     * @param {IstatusRectangle} body
+     * @returns
+     * @memberof MapService
+     */
+    async statusRectangle(body: IstatusRectangle) {
         let url = this.statusRectangleUrl;
         url += '?key=' + this.mapApiKey;
         // 道路等级
@@ -542,9 +757,23 @@ export class MapService {
             return res.data;
         }));
     }
-    // 圆形区域交通态势
+
+    /**
+     *
+     * 高德 圆形区域交通态势 api 地址
+     * @private
+     * @memberof MapService
+     */
     private statusCircleUrl = 'https://restapi.amap.com/v3/traffic/status/circle';
-    async statusCircle(body) {
+
+    /**
+     *
+     * 高德 圆形区域交通态势
+     * @param {IstatusCircle} body
+     * @returns
+     * @memberof MapService
+     */
+    async statusCircle(body: IstatusCircle) {
         let url = this.statusCircleUrl;
         url += '?key=' + this.mapApiKey;
         // 道路等级
@@ -563,9 +792,23 @@ export class MapService {
             return res.data;
         }));
     }
-    // 指定线路交通态势
+
+    /**
+     *
+     * 高德 指定线路交通态势 api 地址
+     * @private
+     * @memberof MapService
+     */
     private statusRoadUrl = 'https://restapi.amap.com/v3/traffic/status/road';
-    async statusRoad(body) {
+
+    /**
+     *
+     * 高德 指定线路交通态势
+     * @param {IstatusRoad} body
+     * @returns
+     * @memberof MapService
+     */
+    async statusRoad(body: IstatusRoad) {
         let url = this.statusRoadUrl;
         url += '?key=' + this.mapApiKey;
         // 道路等级

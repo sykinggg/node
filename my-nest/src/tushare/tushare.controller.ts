@@ -1,6 +1,5 @@
 import { Controller, Get, Req, Post, Body } from '@nestjs/common';
 import { TushareService } from './tushare.service';
-import { async } from 'rxjs/internal/scheduler/async';
 
 @Controller('tushare')
 export class TushareController {

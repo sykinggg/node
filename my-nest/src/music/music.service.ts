@@ -10,9 +10,11 @@ export class MusicService {
     ) { }
 
     /**
-     * qq 音乐
+     *
+     * qq 音乐 常量
+     * @private
+     * @memberof MusicService
      */
-    // 常量
     private qq_common_param = {
         g_tk: 5381,
         inCharset: 'utf-8',
@@ -24,8 +26,20 @@ export class MusicService {
         hostUin: 0,
     };
 
-    // 轮播图
+    /**
+     *
+     * 轮播图 地址
+     * @private
+     * @memberof MusicService
+     */
     private qqCarouselUrl = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg';
+
+    /**
+     *
+     * qq 轮播图
+     * @returns {Promise<any>}
+     * @memberof MusicService
+     */
     async qqCarousel(): Promise<any> {
         const url = this.qqCarouselUrl;
 
@@ -34,8 +48,20 @@ export class MusicService {
         }));
     }
 
-    // 歌单列表
+    /**
+     *
+     * qq 歌单列表 地址
+     * @private
+     * @memberof MusicService
+     */
     private qqSongListUrl = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg';
+
+    /**
+     *
+     * qq 歌单列表
+     * @returns {Promise<any>}
+     * @memberof MusicService
+     */
     async qqSongList(): Promise<any> {
         const url = this.qqSongListUrl;
         const params = Object.assign({}, this.qq_common_param, {
@@ -56,8 +82,21 @@ export class MusicService {
         }));
     }
 
-    // 歌单详情
+    /**
+     *
+     * qq 歌单详情 地址
+     * @private
+     * @memberof MusicService
+     */
     private qqSongListDetailUrl = 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg';
+
+    /**
+     *
+     * qq 歌单详情
+     * @param {*} request
+     * @returns {Promise<any>}
+     * @memberof MusicService
+     */
     async qqSongListDetail(request): Promise<any> {
         const url = this.qqSongListDetailUrl;
         const params = Object.assign({}, this.qq_common_param, {
@@ -79,8 +118,21 @@ export class MusicService {
         }));
     }
 
-    // 歌手数据
+    /**
+     *
+     * qq 歌手数据 地址
+     * @private
+     * @memberof MusicService
+     */
     private qqSingerUrl = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg';
+
+    /**
+     *
+     * qq 歌手数据
+     * @param {*} request
+     * @returns {Promise<any>}
+     * @memberof MusicService
+     */
     async qqSinger(request): Promise<any> {
         const url = this.qqSingerUrl;
         const params = Object.assign({}, this.qq_common_param, {
@@ -99,8 +151,21 @@ export class MusicService {
         }));
     }
 
-    // 歌手详情
+    /**
+     *
+     * qq 歌手详情 地址
+     * @private
+     * @memberof MusicService
+     */
     private qqSingerDetailUrl = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg';
+
+    /**
+     *
+     * qq 歌手详情
+     * @param {*} request
+     * @returns {Promise<any>}
+     * @memberof MusicService
+     */
     async qqSingerDetail(request): Promise<any> {
         const url = this.qqSingerDetailUrl;
 
@@ -120,8 +185,21 @@ export class MusicService {
         }));
     }
 
-    // 排行榜
+    /**
+     *
+     * qq 排行榜 地址
+     * @private
+     * @memberof MusicService
+     */
     private qqRankUrl = 'https://c.y.qq.com/v8/fcg-bin/fcg_myqq_toplist.fcg';
+
+    /**
+     *
+     * qq 排行榜
+     * @param {*} request
+     * @returns {Promise<any>}
+     * @memberof MusicService
+     */
     async qqRank(request): Promise<any> {
         const url = this.qqRankUrl;
 
@@ -140,8 +218,21 @@ export class MusicService {
         }));
     }
 
-    // 排行榜详情
+    /**
+     *
+     * qq 排行榜详情 地址
+     * @private
+     * @memberof MusicService
+     */
     private qqRankDetailUrl = 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg';
+
+    /**
+     *
+     * qq 排行榜详情
+     * @param {*} request
+     * @returns {Promise<any>}
+     * @memberof MusicService
+     */
     async qqRankDetail(request): Promise<any> {
         const url = this.qqRankDetailUrl;
 

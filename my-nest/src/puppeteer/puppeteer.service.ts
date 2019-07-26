@@ -92,11 +92,18 @@ export class PuppeteerService {
 
     /**
      *
-     * mm131获取基础分类
+     * mm131 地址
      * @private
      * @memberof PuppeteerService
      */
     private mm131Url = 'http://www.mm131.com/';
+
+    /**
+     *
+     * mm131获取基础分类
+     * @private
+     * @memberof PuppeteerService
+     */
     async getMm131BasicClass(data?: any): Promise<any> {
         if (!data) {
             data = {};
@@ -190,6 +197,14 @@ export class PuppeteerService {
      */
     private girl13Url = 'http://www.girl13.com/page/';
     private index;
+
+    /**
+     *
+     * 获取 girl13 详情
+     * @param {*} [data]
+     * @returns {Promise<any>}
+     * @memberof PuppeteerService
+     */
     async setGirl13GetDetails(data?: any): Promise<any> {
         const browser = await (puppeteer.launch({ headless: true }));
         const page = await browser.newPage();

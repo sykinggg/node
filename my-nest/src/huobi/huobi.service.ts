@@ -17,6 +17,11 @@ export class HuobiService {
         private readonly httpService: HttpService,
     ) { }
 
+    /**
+     *
+     * huobi api 地址
+     * @memberof HuobiService
+     */
     public URL_HUOBI_PRO = 'api.huobi.br.com';
     public SECRET_KEY = '4ac2beda-8e9a9831-ee4c0018-c05d3';
     public ACCESS_KEY = '2b18d2ac-d2c0f3c5-fb330e3b-9ba5a';

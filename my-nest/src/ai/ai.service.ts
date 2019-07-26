@@ -9,6 +9,13 @@ export class AiService {
         @Inject('AiDataBaseModelToken') private readonly AiDataBaseModel: Model<any>,
     ) { }
 
+    /**
+     *
+     * 创建基础数据
+     * @param {CreateAiDataBaseDto} data
+     * @returns {Promise<any>}
+     * @memberof AiService
+     */
     async createBaseData(data: CreateAiDataBaseDto): Promise<any> {
         // console.log(data);
         let oldArr = await this.getData('createBaseData');
@@ -23,7 +30,13 @@ export class AiService {
         return oldArr;
     }
 
-    // 写入数据
+    /**
+     *
+     * 写入数据
+     * @param {*} type
+     * @param {*} [data]
+     * @memberof AiService
+     */
     public setData(type, data?): void {
         console.log('写入数据', type, data);
         const oldModal = this.AiDataBaseModel.find({ name: type }).exec();
@@ -45,7 +58,13 @@ export class AiService {
         });
     }
 
-    // 获取数据
+    /**
+     *
+     * 获取数据
+     * @param {*} type
+     * @returns {*}
+     * @memberof AiService
+     */
     public getData(type): any {
         const oldModal = this.AiDataBaseModel.find({ name: type }).exec();
         return oldModal.then(res => {

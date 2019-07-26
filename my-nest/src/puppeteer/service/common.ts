@@ -9,7 +9,13 @@ export class PupCommonService {
         private readonly httpService: HttpService,
     ) { }
 
-    // 自动滚动到底部
+    /**
+     *
+     * 自动滚动到底部
+     * @param {*} page
+     * @returns
+     * @memberof PupCommonService
+     */
     public autoScroll(page: any) {
         return page.evaluate(() => {
             return new Promise((resolve, reject) => {
@@ -29,9 +35,28 @@ export class PupCommonService {
         });
     }
 
-    // 获取每一页的列表数据
+    /**
+     *
+     * 列表页数
+     * @memberof PupCommonService
+     */
     pageListIdx = 0;
+
+    /**
+     *
+     * 列表集合
+     * @memberof PupCommonService
+     */
     pageList = [];
+
+    /**
+     *
+     * 获取每一页的列表数据
+     * @param {*} page
+     * @param {*} datas
+     * @returns {Promise<any>}
+     * @memberof PupCommonService
+     */
     async getMm131GetPageList(page, datas): Promise<any> {
         const data = datas[this.pageListIdx];
         console.log(`第${this.pageListIdx}页开始`);
@@ -70,9 +95,28 @@ export class PupCommonService {
         return this.pageList;
     }
 
-    // 获取列表中的详情数据
+    /**
+     *
+     * 详情 页数
+     * @memberof PupCommonService
+     */
     detailsIdx = 0;
+
+    /**
+     *
+     * 详情 集合
+     * @memberof PupCommonService
+     */
     detailsList = [];
+
+    /**
+     *
+     * 获取列表中的详情数据
+     * @param {*} page
+     * @param {*} datas
+     * @returns {Promise<any>}
+     * @memberof PupCommonService
+     */
     async getMm131GetDetailsList(page, datas): Promise<any> {
         const data = datas[this.detailsIdx];
         // console.log(datas);
@@ -110,9 +154,31 @@ export class PupCommonService {
         return result;
     }
 
-    // girl13 list
+    /**
+     *
+     * girl13 页数
+     * @private
+     * @memberof PupCommonService
+     */
     private getGirl13ListIdx = 1;
+
+    /**
+     *
+     * girl13 页数集合
+     * @private
+     * @memberof PupCommonService
+     */
     private getGirl13ListData = [];
+
+    /**
+     *
+     * girl13 list
+     * @param {*} page
+     * @param {*} url
+     * @param {*} num
+     * @returns {Promise<any>}
+     * @memberof PupCommonService
+     */
     async getGirl13List(page, url, num): Promise<any> {
         await page.goto(url + this.getGirl13ListIdx, { waitUntil: 'load', timeout: 0 });
         await page.waitFor(1000);
@@ -152,7 +218,13 @@ export class PupCommonService {
         return this.getGirl13ListData;
     }
 
-    // 写入数据
+    /**
+     *
+     * 写入数据
+     * @param {*} type
+     * @param {*} [data]
+     * @memberof PupCommonService
+     */
     public setData(type, data?): void {
         const oldModal = this.pupPicModel.find({ name: type }).exec();
         oldModal.then(res => {
@@ -173,7 +245,13 @@ export class PupCommonService {
         });
     }
 
-    // 获取数据
+    /**
+     *
+     * 获取数据
+     * @param {*} type
+     * @returns {*}
+     * @memberof PupCommonService
+     */
     public getData(type): any {
         const oldModal = this.pupPicModel.find({ name: type }).exec();
         return oldModal.then(res => {
