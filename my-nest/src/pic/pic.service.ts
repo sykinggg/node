@@ -141,7 +141,8 @@ export class PicService {
             $('.postlist img').each((i, ele) => {
                 const imgUrl = $(ele).attr('data-original');
                 if (imgUrl) {
-                    this.imgsrc.push('http://www.5aav.com' + imgUrl);
+                    // this.imgsrc.push('http://www.5aav.com' + imgUrl);
+                    this.imgsrc.push(imgUrl);
                 }
             });
         } else if (this.type === 'jiandan') {
