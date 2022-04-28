@@ -12,7 +12,7 @@
     "blog": "http://www.cnblogs.com/qieguo/"
   },
   "dependencies": {
-    "async": "^2.0.0-rc.6",
+    "async": "^2.6.4",
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
